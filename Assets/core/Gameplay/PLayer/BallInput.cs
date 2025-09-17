@@ -14,26 +14,25 @@ namespace Gameplay.Player
 
         private void Update()
         {
-            HandleKeyboardInput();
-            HandleMouseInput();
+            HandleRotationInput();
+            HandleDetachInput();
         }
 
-        private void HandleKeyboardInput()
+        private void HandleRotationInput()
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
-                controller.SetMoveDirection(
-                    Quaternion.Euler(0f, 0f, controller.RotationSpeed * Time.deltaTime) *
-                    controller.GetMoveDirection()
-                );
+            bool leftKey = Input.GetKey(KeyCode.LeftArrow);
+            bool rightKey = Input.GetKey(KeyCode.RightArrow);
+            bool leftClick = Input.GetMouseButton(0) && Input.mousePosition.x < Screen.width / 2f;
+            bool rightClick = Input.GetMouseButton(0) && Input.mousePosition.x >= Screen.width / 2f;
 
-            if (Input.GetKey(KeyCode.RightArrow))
-                controller.SetMoveDirection(
-                    Quaternion.Euler(0f, 0f, -controller.RotationSpeed * Time.deltaTime) *
-                    controller.GetMoveDirection()
-                );
+            if (leftKey || leftClick)
+                controller.RotateInFreeFlight(true);
+
+            if (rightKey || rightClick)
+                controller.RotateInFreeFlight(false);
         }
 
-        private void HandleMouseInput()
+        private void HandleDetachInput()
         {
             if (Input.GetMouseButtonDown(0) && controller.IsAnchored)
                 controller.DetachFromAnchor();

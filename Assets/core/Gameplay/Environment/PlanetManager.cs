@@ -8,6 +8,7 @@ using UnityEngine;
 public class PlanetManager : MonoBehaviour
 {
     public ProceduralSettings settings;
+    public GameObject ball;
 
     private readonly List<GameObject> activeObjects = new();
     private readonly List<Vector2> planetPositions = new();
@@ -24,7 +25,6 @@ public class PlanetManager : MonoBehaviour
 
     private void Start()
     {
-        CalculateScreenBounds();
         CreateFixedStartPlanets();
         nextStageY = settings.stageHeight;
         nextTwinGateY = settings.stageHeight * 2; // starting buffer
@@ -32,7 +32,7 @@ public class PlanetManager : MonoBehaviour
 
     private void Update()
     {
-        if (settings.ball.position.y > nextStageY - settings.triggerOffset)
+        if (ball.transform.position.y > nextStageY - settings.triggerOffset)
         {
             GenerateNewStage();
             nextStageY += settings.stageHeight;
@@ -40,18 +40,7 @@ public class PlanetManager : MonoBehaviour
         }
     }
 
-    private void CalculateScreenBounds()
-    {
-        float screenAspect = (float)Screen.width / Screen.height;
-        float cameraHeight = settings.mainCamera.orthographicSize * 2;
-        float cameraWidth = cameraHeight * screenAspect;
-
-        leftBound = settings.mainCamera.transform.position.x - (cameraWidth * settings.horizontalMargin / 2);
-        rightBound = settings.mainCamera.transform.position.x + (cameraWidth * settings.horizontalMargin / 2);
-
-        GameManager.Instance.LeftBarX = leftBound;
-        GameManager.Instance.RightBarX = rightBound;
-    }
+   
 
     private void CreateFixedStartPlanets()
     {
@@ -74,7 +63,7 @@ public class PlanetManager : MonoBehaviour
     {
         planetPositions.Clear();
         spikePositions.Clear();
-        currentDifficulty = Mathf.Clamp01((settings.ball.position.y - settings.safeStartHeight) / 1000f);
+        currentDifficulty = Mathf.Clamp01((ball.transform.position.y - settings.safeStartHeight) / 1000f);
 
         if (nextStageY % 500 == 0)
         {
@@ -87,15 +76,15 @@ public class PlanetManager : MonoBehaviour
         FillGapsBetweenPlanets();
         PlacePowerups();
 
-        if (settings.ball.position.y > settings.zoneStartHeight &&
+        if (ball.transform.position.y > settings.zoneStartHeight &&
             Random.value < settings.zoneSpawnChance &&
             zonePositions.Count < settings.maxZonesPerStage * 3)
         {
             PlaceZones();
         }
 
-        if (settings.ball.position.y > settings.stageHeight &&
-            settings.ball.position.y + settings.stageHeight > nextTwinGateY)
+        if (ball.transform.position.y > settings.stageHeight &&
+            ball.transform.position.y + settings.stageHeight > nextTwinGateY)
         {
             TrySpawnTwinGate();
         }
@@ -302,7 +291,7 @@ public class PlanetManager : MonoBehaviour
             Vector2 position = new(x, yPos);
             if (!IsPositionSafe(position, settings.minObjectSpacing)) continue;
 
-            if (settings.ball.position.y < settings.spikeStartHeight) continue;
+            if (ball.transform.position.y < settings.spikeStartHeight) continue;
 
             CreateSpike(position);
             spikePositions.Add(position);

@@ -140,6 +140,14 @@ namespace Core
         #region Ball State
         public bool IsBallAttached() => ballAttached;
         public void SetBallAttached(bool attached) => ballAttached = attached;
+
+
+        #endregion
+
+        #region Game State
+
+        public bool IsGamePaused() => !gameRunning;
+        public void SetGamePaused(bool paused) => gameRunning = paused;
         #endregion
 
         #region Camera

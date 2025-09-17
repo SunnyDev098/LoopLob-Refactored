@@ -7,8 +7,6 @@ namespace Environment
     {
         [Header("References")]
         public GameObject spriteCarrier;
-        public Transform ball;
-        public Camera mainCamera;
 
         [Header("Prefabs")]
         public GameObject planetPrefab;
