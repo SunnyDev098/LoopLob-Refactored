@@ -56,7 +56,7 @@ public class PlanetManager : MonoBehaviour
         };
 
         for (int i = 0; i < 10; i++)
-            CreatePlanet(new Vector2(fixedXPositions[i], fixedHeights[i]), fixedSizes[i]);
+            CreatePlanet(new Vector2(fixedXPositions[i], fixedHeights[i]), fixedSizes[i]*0.3f);
     }
 
     private void GenerateNewStage()
@@ -74,7 +74,7 @@ public class PlanetManager : MonoBehaviour
 
         PlacePlanets();
         FillGapsBetweenPlanets();
-        PlacePowerups();
+      //  PlacePowerups();
 
         if (ball.transform.position.y > settings.zoneStartHeight &&
             Random.value < settings.zoneSpawnChance &&

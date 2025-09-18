@@ -6,7 +6,7 @@ namespace Gameplay.Player
     public class BallController : MonoBehaviour
     {
         [Header("Movement Settings")]
-        [SerializeField] private float moveSpeed = 5f;       // Linear speed after release
+        [SerializeField] private float moveSpeed = 20f;       // Linear speed after release
         [SerializeField] private float rotationSpeed = 200f; // Orbit speed in degrees/sec
 
         [Header("References")]
@@ -17,6 +17,7 @@ namespace Gameplay.Player
         public Transform anchorPlanet;
         private float totalRotation;
         private float orbitRadius;
+        private float bounceXLimit = 5;
         // Movement
         private Vector2 moveDirection;   // current free-flight direction
         private Vector2 tangentDirection; // tangent at detach moment
@@ -39,6 +40,7 @@ namespace Gameplay.Player
             {
                 // Transform-based free flight movement
                 transform.position += (Vector3)(moveDirection * moveSpeed * Time.deltaTime);
+                CheckHorizontalBounce();
             }
         }
 
@@ -75,7 +77,21 @@ namespace Gameplay.Player
             // Tangent direction for when we detach
             tangentDirection = new Vector2(-dir.y, dir.x).normalized;
         }
+        // ———————————————————————— Bounce Logic ———————————————————————— //
 
+        private void CheckHorizontalBounce()
+        {
+            Vector3 pos = transform.position;
+
+            if (pos.x >= bounceXLimit )
+            {
+                moveDirection.x = -moveDirection.x;
+            }
+            else if (pos.x <= -bounceXLimit)
+            {
+                moveDirection.x = -moveDirection.x;
+            }
+        }
         // ———————————————————————— Public Actions ———————————————————————— //
 
         public void AttachToAnchor(Transform anchor)

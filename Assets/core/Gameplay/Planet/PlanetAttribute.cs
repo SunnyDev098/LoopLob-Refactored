@@ -32,7 +32,7 @@ public class PlanetAttribute : MonoBehaviour
         startPosition = transform.position;
 
         // Calculate orbit radius based on planet size
-        orbitRadius = (transform.localScale.x * 2f) / 2f;
+        orbitRadius = (transform.localScale.x * 1.5f) / 2f;
 
         // Hide orbit visual initially
         if (activatedOrbit != null)
