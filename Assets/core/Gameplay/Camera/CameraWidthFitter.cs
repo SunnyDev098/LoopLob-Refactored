@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraWidthFitter : MonoBehaviour
 {
-    [SerializeField] private float desiredHalfWidth = 8f; // Half of full width to view
+    [SerializeField] private float desiredHalfWidth = 10f; // Half of full width to view
     private Camera cam;
 
     private void Awake()

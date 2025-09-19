@@ -37,7 +37,7 @@ namespace Core
         private bool ballAttached;
 
         private int vfxVolume;
-
+        public float SfxVolume { get; private set; } = 1f;
         public bool IsGameOver { get; private set; }
         public int TotalPoints { get; private set; }
 
@@ -70,6 +70,7 @@ namespace Core
             }
 
             IsGameOver = false;
+            LoadSettings();
             TotalPoints = 0;
         }
         #endregion
@@ -88,17 +89,35 @@ namespace Core
             Application.targetFrameRate = 60;
         }
 
-     
+        private void LoadSettings()
+        {
+            SfxVolume = PlayerPrefs.GetFloat("sfx_volume", 1f);
+        }
 
         #region Game Flow
         public void EndGame(int finalScore)
         {
-            IsGameOver = true;
-            TotalPoints = finalScore;
+            if (IsGameOver) return;
 
+            IsGameOver = true;
+            SetGamePaused(true);
             retryBtn.gameObject.SetActive(true);
             backToMenuBtn.gameObject.SetActive(true);
             sendMessageBtn.gameObject.SetActive(true);
+            Debug.Log($"Game Over! Final score: {finalScore}");
+        }
+        private void OnEnable()
+        {
+            EventBus.OnGameOver += HandleGameOver;
+        }
+
+        private void OnDisable()
+        {
+            EventBus.OnGameOver -= HandleGameOver;
+        }
+        private void HandleGameOver()
+        {
+            EndGame(GetCurrentScore()); // Or whatever finalScore source you have
         }
 
         public void ResetGame()
@@ -122,8 +141,7 @@ namespace Core
         public float GetMusicVolume() => musicVolume;
         public void SetSfxVolume(float volume) => sfxVolume = volume;
         public float GetSfxVolume() => sfxVolume;
-        public void SetVfxVolume(int volume) => vfxVolume = volume;
-        public int GetVfxVolume() => vfxVolume;
+        public void SetSfxVolume(int volume) => sfxVolume = volume;
         #endregion
 
         #region Power-Ups

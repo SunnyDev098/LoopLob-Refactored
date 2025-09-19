@@ -94,7 +94,7 @@ namespace Environment
 
         [Header("Extra Prefabs")]
         public GameObject twinGatePrefab;    // old laser gun twin gate prefab
-        public GameObject dangerZonePrefab;
-        public GameObject safeZonePrefab;
+       // public GameObject dangerZonePrefab;
+       // public GameObject safeZonePrefab;
     }
 }

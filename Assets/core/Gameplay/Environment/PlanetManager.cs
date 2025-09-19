@@ -28,6 +28,8 @@ public class PlanetManager : MonoBehaviour
         CreateFixedStartPlanets();
         nextStageY = settings.stageHeight;
         nextTwinGateY = settings.stageHeight * 2; // starting buffer
+        TrySpawnTwinGate(50);
+
     }
 
     private void Update()
@@ -75,18 +77,18 @@ public class PlanetManager : MonoBehaviour
         PlacePlanets();
         FillGapsBetweenPlanets();
       //  PlacePowerups();
-
+      /*
         if (ball.transform.position.y > settings.zoneStartHeight &&
             Random.value < settings.zoneSpawnChance &&
             zonePositions.Count < settings.maxZonesPerStage * 3)
         {
             PlaceZones();
         }
-
-        if (ball.transform.position.y > settings.stageHeight &&
-            ball.transform.position.y + settings.stageHeight > nextTwinGateY)
+      */
+        if (ball.transform.position.y > settings.stageHeight )
         {
-            TrySpawnTwinGate();
+            TrySpawnTwinGate(settings.stageHeight + ball.transform.position.y + Random.RandomRange(50,100));
+            
         }
     }
 
@@ -102,33 +104,9 @@ public class PlanetManager : MonoBehaviour
         return false;
     }
 
-    private void TrySpawnTwinGate()
+    private void TrySpawnTwinGate(float y)
     {
-        float spawnY = nextTwinGateY + Random.Range(100f, 130f);
-        if (IsLaserGunNear(spawnY, 6f)) return;
-
-        bool leftFirst = Random.value < 0.5f;
-        GameObject twinGate = Instantiate(settings.twinGatePrefab, new Vector3(0, spawnY, 0), Quaternion.identity);
-        activeObjects.Add(twinGate);
-
-        Transform gateA = twinGate.transform.GetChild(0);
-        Transform gateB = twinGate.transform.GetChild(1);
-
-        float leftX = GameManager.Instance.LeftBarX - 0.8f;
-        float rightX = GameManager.Instance.RightBarX + 0.8f;
-
-        if (leftFirst)
-        {
-            gateA.position = new Vector3(leftX, spawnY, 0f);
-            gateB.position = new Vector3(rightX, spawnY + 6f, 0f);
-        }
-        else
-        {
-            gateA.position = new Vector3(rightX, spawnY, 0f);
-            gateB.position = new Vector3(leftX, spawnY + 6f, 0f);
-        }
-
-        nextTwinGateY += Random.Range(200f, 300f);
+        settings.twinGatePrefab.GetComponent<TwinGate>().Spawn(y);
     }
     #endregion
 
@@ -187,7 +165,7 @@ public class PlanetManager : MonoBehaviour
         return Vector2.zero;
     }
     #endregion
-
+    /*
     #region Zones
     private void PlaceZones()
     {
@@ -221,7 +199,7 @@ public class PlanetManager : MonoBehaviour
             }
         }
     }
-
+    
     private bool IsZonePositionValid(Vector2 pos)
     {
         foreach (Vector2 zonePos in zonePositions)
@@ -249,7 +227,7 @@ public class PlanetManager : MonoBehaviour
         activeObjects.Add(redZone);
     }
     #endregion
-
+    */
     #region Gaps, Coins & Powerups
     private void FillGapsBetweenPlanets()
     {

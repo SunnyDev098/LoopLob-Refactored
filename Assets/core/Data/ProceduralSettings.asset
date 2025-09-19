@@ -15,7 +15,7 @@ MonoBehaviour:
   spriteCarrier: {fileID: 0}
   planetPrefab: {fileID: 6555924651408547538, guid: 67786bab41322624db12dc21f44d781d, type: 3}
   triangleSpikePrefab: {fileID: 0}
-  laserGunPrefab: {fileID: 0}
+  laserGunPrefab: {fileID: 980303768243886007, guid: 7717afbe547dea4449825351d177c619, type: 3}
   distanceBannerPrefab: {fileID: 6597243415142027872, guid: f5b4e872af2dcbc4ba8f17940d0e1da6, type: 3}
   badPlanetPrefab: {fileID: 0}
   blackHolePrefab: {fileID: 0}
@@ -37,17 +37,53 @@ MonoBehaviour:
   minEdgeDistance: 1.5
   sizeReductionCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.010559082
+      value: 0.18209839
+      inSlope: 0.5415553
+      outSlope: 0.5415553
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99243164
+      value: 0.71383667
+      inSlope: 0.5415553
+      outSlope: 0.5415553
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   distanceIncreaseCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.004512787
+      value: 0.2394104
+      inSlope: 0.4754625
+      outSlope: 0.4754625
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99365234
+      value: 0.70970917
+      inSlope: 0.4754625
+      outSlope: 0.4754625
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  stageHeight: 500
+  stageHeight: 50
   triggerOffset: 500
   twinGateStartHeight: 1000
   twinGateSpawnInterval: {x: 200, y: 300}
@@ -82,6 +118,6 @@ MonoBehaviour:
   freeCoinPathChance: 0.3
   distanceBannerInterval: 500
   fadeDuration: 3
-  twinGatePrefab: {fileID: 0}
+  twinGatePrefab: {fileID: 6160786418203971013, guid: 7c28a54f93d6dd943ae474394856df57, type: 3}
   dangerZonePrefab: {fileID: 0}
   safeZonePrefab: {fileID: 0}

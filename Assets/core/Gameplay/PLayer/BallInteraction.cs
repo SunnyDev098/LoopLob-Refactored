@@ -16,7 +16,8 @@ public class BallInteraction : MonoBehaviour
         if (other.transform.TryGetComponent<IOrbitAnchor>(out var anchor))
             anchor.OnAnchored(GetComponent<BallController>());
 
-
+        if (other.transform.TryGetComponent<ITwinGate>(out var teleporter))
+            teleporter.OnTeleport(GetComponent<BallController>());
 
     }
 }
