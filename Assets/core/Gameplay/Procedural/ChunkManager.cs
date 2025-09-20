@@ -1,69 +1,102 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ChunkManager : MonoBehaviour
 {
-    [Header("Chunk Settings")]
-    [Tooltip("All chunk prefabs designed by level designers.")]
-    public List<GameObject> chunkPrefabs;
-
-    [Tooltip("Vertical distance each chunk covers in world Y units.")]
-    public float chunkHeight = 50f;
-
-    [Tooltip("Number of chunks to keep loaded at any time.")]
-    public int chunksVisible = 5;
-
-    [Tooltip("How far below the player to remove old chunks.")]
-    public float cleanupBuffer = 30f;
-
-    [Header("References")]
-    public Transform player; // Ball transform
-    public Transform chunkParent; // Optional parent for spawned chunks
-
-    private Queue<GameObject> activeChunks = new Queue<GameObject>();
-    private float nextSpawnY;
-    private float lastPlayerY;
-
-    private void Start()
+    [System.Serializable]
+    public class ChunkTier
     {
-        nextSpawnY = 0f;
-        lastPlayerY = player.position.y;
-        for (int i = 0; i < chunksVisible; i++)
-        {
-            SpawnNextChunk();
-        }
+        public string name;
+        public GameObject[] chunkPrefabs;
     }
 
-    private void Update()
+    [Header("Chunk System Settings")]
+    public ChunkTier[] chunkTiers;
+    public float chunkHeight = 200f;
+
+    private Vector3 nextSpawnPosition;
+    private int spawnedCount;
+    private int[] lastPrefabIndexPerTier;
+    
+    private void Awake()
     {
-        if (player.position.y > lastPlayerY)
+        ResetSpawner();
+    }
+
+    public void ResetSpawner()
+    {
+        spawnedCount = 0;
+        nextSpawnPosition = Vector3.zero;
+
+        int tierCount = chunkTiers != null ? chunkTiers.Length : 0;
+        lastPrefabIndexPerTier = new int[tierCount];
+
+        for (int i = 0; i < tierCount; i++)
+            lastPrefabIndexPerTier[i] = -1;
+    }
+    
+    public void SpawnFirstChunk(Transform chunkParent)
+    {
+        SpawnChunkFromTier(0, chunkParent);
+    }
+
+    public void SpawnNextChunk(float playerY, Transform chunkParent)
+    {
+        int tierIndex = DecideTierIndex(playerY);
+        SpawnChunkFromTier(tierIndex, chunkParent);
+    }
+
+    private int DecideTierIndex(float playerY)
+    {
+        if (chunkTiers == null || chunkTiers.Length == 0)
+            return 0;
+
+        if (playerY < 1000f) return 0;
+        else if (playerY < 2000f) return Mathf.Min(1, chunkTiers.Length - 1);
+        else if (playerY < 3000f) return Mathf.Min(2, chunkTiers.Length - 1);
+        else return chunkTiers.Length - 1;
+    }
+
+    private void SpawnChunkFromTier(int tierIndex, Transform chunkParent)
+    {
+        if (lastPrefabIndexPerTier == null || lastPrefabIndexPerTier.Length != chunkTiers.Length)
         {
-            if (player.position.y + chunkHeight * (chunksVisible / 2) > nextSpawnY)
+            Debug.LogWarning("ChunkManager not initied ");
+            ResetSpawner();
+        }
+
+        if (chunkTiers == null || chunkTiers.Length == 0)
+        {
+            Debug.LogWarning("ChunkManager  No tiers assigned");
+            return;
+        }
+
+        if (tierIndex >= chunkTiers.Length)
+            tierIndex = chunkTiers.Length - 1;
+
+        ChunkTier tier = chunkTiers[tierIndex];
+        if (tier.chunkPrefabs == null || tier.chunkPrefabs.Length == 0)
+        {
+            Debug.LogWarning($"ChunkManager Tier  has no prefabs");
+            return;
+        }
+
+        int prefabIndex;
+        if (tier.chunkPrefabs.Length == 1)
+        {
+            prefabIndex = 0;
+        }
+        else
+        {
+            do
             {
-                SpawnNextChunk();
-                CleanupOldChunks();
-            }
+                prefabIndex = Random.Range(0, tier.chunkPrefabs.Length);
+            } while (prefabIndex == lastPrefabIndexPerTier[tierIndex]);
         }
-        lastPlayerY = player.position.y;
-    }
 
-    private void SpawnNextChunk()
-    {
-        if (chunkPrefabs.Count == 0) return;
+        lastPrefabIndexPerTier[tierIndex] = prefabIndex;
 
-        GameObject prefab = chunkPrefabs[Random.Range(0, chunkPrefabs.Count)];
-        GameObject chunk = Instantiate(prefab, new Vector3(0, nextSpawnY, 0), Quaternion.identity, chunkParent);
-        activeChunks.Enqueue(chunk);
-        nextSpawnY += chunkHeight;
-    }
-
-    private void CleanupOldChunks()
-    {
-        while (activeChunks.Count > chunksVisible)
-        {
-            GameObject oldChunk = activeChunks.Dequeue();
-            if (oldChunk)
-                Destroy(oldChunk);
-        }
+        Instantiate(tier.chunkPrefabs[prefabIndex], nextSpawnPosition, Quaternion.identity, chunkParent);
+        nextSpawnPosition.y += chunkHeight;
+        spawnedCount++;
     }
 }

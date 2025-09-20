@@ -7,8 +7,9 @@ using UnityEngine;
 
 public class PlanetManager : MonoBehaviour
 {
-    public ProceduralSettings settings;
-    public GameObject ball;
+    [SerializeField] private ChunkManager chunkManager;
+    [SerializeField] private ProceduralSettings settings;
+    [SerializeField] private GameObject ball;
 
     private readonly List<GameObject> activeObjects = new();
     private readonly List<Vector2> planetPositions = new();
@@ -25,10 +26,20 @@ public class PlanetManager : MonoBehaviour
 
     private void Start()
     {
+        /*
         CreateFixedStartPlanets();
         nextStageY = settings.stageHeight;
-        nextTwinGateY = settings.stageHeight * 2; // starting buffer
         TrySpawnTwinGate(50);
+        */
+        nextStageY = settings.stageHeight;
+
+
+        ///  added from now on the level making system goes like this:
+        chunkManager.SpawnFirstChunk(transform);
+
+
+
+
 
     }
 
@@ -38,7 +49,7 @@ public class PlanetManager : MonoBehaviour
         {
             GenerateNewStage();
             nextStageY += settings.stageHeight;
-            CleanupOldObjects();
+            //CleanupOldObjects();
         }
     }
 
@@ -63,6 +74,7 @@ public class PlanetManager : MonoBehaviour
 
     private void GenerateNewStage()
     {
+
         planetPositions.Clear();
         spikePositions.Clear();
         currentDifficulty = Mathf.Clamp01((ball.transform.position.y - settings.safeStartHeight) / 1000f);
@@ -76,20 +88,21 @@ public class PlanetManager : MonoBehaviour
 
         PlacePlanets();
         FillGapsBetweenPlanets();
-      //  PlacePowerups();
-      /*
-        if (ball.transform.position.y > settings.zoneStartHeight &&
-            Random.value < settings.zoneSpawnChance &&
-            zonePositions.Count < settings.maxZonesPerStage * 3)
-        {
-            PlaceZones();
-        }
-      */
+
+
+
+      
         if (ball.transform.position.y > settings.stageHeight )
         {
             TrySpawnTwinGate(settings.stageHeight + ball.transform.position.y + Random.RandomRange(50,100));
             
         }
+
+
+
+      ////  here is new chunk manager system calling
+        chunkManager.SpawnNextChunk(ball.transform.position.y, transform);
+
     }
 
     #region Twin Gates

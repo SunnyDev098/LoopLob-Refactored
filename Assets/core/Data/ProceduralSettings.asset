@@ -83,8 +83,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  stageHeight: 50
-  triggerOffset: 500
+  stageHeight: 200
+  triggerOffset: 20
   twinGateStartHeight: 1000
   twinGateSpawnInterval: {x: 200, y: 300}
   safeStartHeight: 50
@@ -119,5 +119,3 @@ MonoBehaviour:
   distanceBannerInterval: 500
   fadeDuration: 3
   twinGatePrefab: {fileID: 6160786418203971013, guid: 7c28a54f93d6dd943ae474394856df57, type: 3}
-  dangerZonePrefab: {fileID: 0}
-  safeZonePrefab: {fileID: 0}
