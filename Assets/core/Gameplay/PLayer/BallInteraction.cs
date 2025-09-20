@@ -20,4 +20,10 @@ public class BallInteraction : MonoBehaviour
             teleporter.OnTeleport(GetComponent<BallController>());
 
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.TryGetComponent<IAttractor>(out var attractor))
+            attractor.OnAttracted(GetComponent<BallController>());
+    }
 }

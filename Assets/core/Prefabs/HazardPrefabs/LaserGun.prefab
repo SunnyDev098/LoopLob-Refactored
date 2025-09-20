@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 980303768243886007}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 7.18, y: -1.7638946, z: -3.4690847}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.3, y: 0.29999998, z: 0.3}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -198,12 +198,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8aaa2ed815b9d1468a5661dfe2e27bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserShotSound: {fileID: 0}
+  laserShotSound: {fileID: 8300000, guid: d088505795dd5164ca864ef63ebc4ac7, type: 3}
   isLeftGun: 0
   minAimAngle: -25
   maxAimAngle: 25
   rotationSpeed: 40
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 6558413057120206410, guid: ab48854bcacb0d7468599a40f48fe847, type: 3}
   projectileSpeed: 12
   timeBetweenShots: 0.15
   shotOffsetZ: 1
