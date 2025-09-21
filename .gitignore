@@ -1,0 +1,47 @@
+# --------------------------
+# Unity
+# --------------------------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+UserSettings/
+Assets/AssetStoreTools*
+*.apk
+*.unitypackage
+
+# Ignore meta files for non-Assets
+/[Ll]ibrary.meta
+/[Tt]emp.meta
+/[Oo]bj.meta
+/[Bb]uild.meta
+/[Ll]ogs.meta
+/[Mm]emoryCaptures.meta
+/[Uu]serSettings.meta
+
+# --------------------------
+# Visual Studio / Rider
+# --------------------------
+.vs/
+.idea/
+*.user
+*.userprefs
+*.suo
+*.tmp
+*.pidb
+*.booproj
+*.svd
+
+# --------------------------
+# OS-generated cruft
+# --------------------------
+.DS_Store
+Thumbs.db
+
+# --------------------------
+# Crash Reports
+# --------------------------
+sysinfo.txt
