@@ -62,7 +62,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\core\Gameplay\Camera\CameraFollowBall.cs" />
-    <Compile Include="Assets\core\Gameplay\Intefaces\ITwinGate.cs" />
     <Compile Include="Assets\core\Gameplay\Environment\BackGround\BackGroundObjectSpawner.cs" />
     <Compile Include="Assets\beam_emitter_scr.cs" />
     <Compile Include="Assets\core\Gameplay\Environment\HazardSpawner.cs" />
@@ -76,7 +75,6 @@
     <Compile Include="Assets\core\Gameplay\Hazards\BeamEmitter.cs" />
     <Compile Include="Assets\core\Gameplay\Environment\TwinGate.cs" />
     <Compile Include="Assets\spike_scr.cs" />
-    <Compile Include="Assets\core\Gameplay\Intefaces\IOrbitAnchor.cs" />
     <Compile Include="Assets\core\Gameplay\Procedural\PlanetManager.cs" />
     <Compile Include="Assets\core\Gameplay\Intefaces\IAtractor.cs" />
     <Compile Include="Assets\core\Gameplay\Procedural\ProceduralGenerator.cs" />
@@ -84,6 +82,7 @@
     <Compile Include="Assets\core\Gameplay\Planet\PlanetAnchor.cs" />
     <Compile Include="Assets\core\Gameplay\Player\BallInput.cs" />
     <Compile Include="Assets\core\Gameplay\Player\IBallState.cs" />
+    <Compile Include="Assets\core\Gameplay\Intefaces\IHitBall.cs" />
     <Compile Include="Assets\core\Gameplay\Collectibles\Coin.cs" />
     <Compile Include="Assets\core\Gameplay\Hazards\Spike.cs" />
     <Compile Include="Assets\core\Gameplay\Planet\PlanetAttribute.cs" />
@@ -94,9 +93,7 @@
     <Compile Include="Assets\core\Gameplay\Player\BallPowerUps.cs" />
     <Compile Include="Assets\black_hole_scr.cs" />
     <Compile Include="Assets\core\Gameplay\Player\BallInteraction.cs" />
-    <Compile Include="Assets\core\Gameplay\Intefaces\ICollectible.cs" />
     <Compile Include="Assets\core\Gameplay\Procedural\SpawnExecutor.cs" />
-    <Compile Include="Assets\core\Gameplay\Intefaces\IHazard.cs" />
     <Compile Include="Assets\core\Gameplay\Environment\ZoneSpawner.cs" />
   </ItemGroup>
   <ItemGroup>
