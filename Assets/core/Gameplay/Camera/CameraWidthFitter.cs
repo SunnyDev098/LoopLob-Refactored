@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
@@ -7,22 +8,27 @@ using UnityEngine;
 public class CameraWidthFitter : MonoBehaviour
 {
     [SerializeField] private float desiredHalfWidth = 10f; // Half of full width to view
+    public Transform TopBar ; // TopBarTransform to use in rocket launcher
     private Camera cam;
 
-    private void Awake()
+    private async void Awake()
     {
         cam = GetComponent<Camera>();
         AdjustSize();
+        await Task.Delay(100);
+        TopBarSetter();
     }
 
-    private void LateUpdate()
-    {
-        AdjustSize();
-    }
-
+  
     private void AdjustSize()
     {
         // Orthographic size is "half height", height = width / aspect
         cam.orthographicSize = desiredHalfWidth / cam.aspect;
+    }
+
+    private void TopBarSetter()
+    {
+        float topEdge = Camera.main.transform.position.y + Camera.main.orthographicSize;
+        TopBar.transform.position = new Vector2(0, topEdge);
     }
 }

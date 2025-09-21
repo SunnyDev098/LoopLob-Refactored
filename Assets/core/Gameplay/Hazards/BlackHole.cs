@@ -7,7 +7,6 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class BlackHole : MonoBehaviour, IAttractor
 {
-    #region Serialized Fields
     [Header("Attraction Settings")]
     [Tooltip("How strongly the direction curves toward center")]
     [SerializeField] private float attractionStrength = 5f;
@@ -28,14 +27,9 @@ public class BlackHole : MonoBehaviour, IAttractor
     [Header("Delay & Debug")]
     [SerializeField] private float attractionDelay = 0.5f;
     [SerializeField] private bool showDebugGizmos = true;
-    #endregion
-
-    #region Private Fields
-    private float enterTime;
     private AudioSource audioSource;
-    #endregion
+    private float enterTime;
 
-    #region Unity Callbacks
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -52,9 +46,7 @@ public class BlackHole : MonoBehaviour, IAttractor
         if (other.GetComponent<BallController>() != null)
             enterTime = Time.time;
     }
-    #endregion
 
-    #region IAttractor Implementation
     public void OnAttracted(BallController ball)
     {
         // Delay before starting attraction
@@ -84,7 +76,6 @@ public class BlackHole : MonoBehaviour, IAttractor
             attractionFactor
         ).normalized * currentDirection.magnitude);
     }
-    #endregion
 
     
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Core;
+using Gameplay.player;
 
 namespace Gameplay.Player
 {

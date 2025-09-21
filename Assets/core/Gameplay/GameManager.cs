@@ -13,6 +13,10 @@ namespace Core
         [SerializeField] private Button sendMessageBtn;
         [SerializeField] private Button retryBtn;
         [SerializeField] private GameObject powerUpStuff;
+        [SerializeField] public AudioSource audioSource;
+        public GameObject Ball;
+        public GameObject Camera;
+        public Transform TopBar;
 
         private Dictionary<string, string> globalUserMessageDic = new();
         private bool ghostMessagesCollected;
@@ -55,7 +59,7 @@ namespace Core
         public int NextDangerZoneHeight { get => nextDangerZoneHeight; set => nextDangerZoneHeight = value; }
         public bool CheckForDangerZone { get => checkForDangerZone; set => checkForDangerZone = value; }
 
-        #region Singleton
+      //  #region Singleton
         private void Awake()
         {
             if (Instance == null)
@@ -73,7 +77,6 @@ namespace Core
             LoadSettings();
             TotalPoints = 0;
         }
-        #endregion
 
         private void Start()
         {
@@ -94,7 +97,7 @@ namespace Core
             SfxVolume = PlayerPrefs.GetFloat("sfx_volume", 1f);
         }
 
-        #region Game Flow
+      //  #region Game Flow
         public void EndGame(int finalScore)
         {
             if (IsGameOver) return;
@@ -125,26 +128,23 @@ namespace Core
             IsGameOver = false;
             TotalPoints = 0;
         }
-        #endregion
 
-        #region Scores & Currency
+      //  #region Scores & Currency
         public void AddCoin(int amount) => coinNumber += amount;
         public int GetCoinCount() => coinNumber;
         public void SetBestScore(int score) => bestScore = score;
         public int GetBestScore() => bestScore;
         public void SetCurrentScore(int score) => currentScore = score;
         public int GetCurrentScore() => currentScore;
-        #endregion
 
-        #region Volumes
+       // #region Volumes
         public void SetMusicVolume(float volume) => musicVolume = volume;
         public float GetMusicVolume() => musicVolume;
         public void SetSfxVolume(float volume) => sfxVolume = volume;
         public float GetSfxVolume() => sfxVolume;
         public void SetSfxVolume(int volume) => sfxVolume = volume;
-        #endregion
 
-        #region Power-Ups
+     //   #region Power-Ups
         public bool IsShieldActive() => isShieldActive;
         public void SetShieldActive(bool active) => isShieldActive = active;
         public bool IsLaserActive() => isLaserActive;
@@ -153,24 +153,20 @@ namespace Core
         public void SetMagnetActive(bool active) => isMagnetActive = active;
         public bool NoDeath => noDeath;
         public void SetNoDeath(bool active) => noDeath = active;
-        #endregion
 
-        #region Ball State
+     //   #region Ball State
         public bool IsBallAttached() => ballAttached;
         public void SetBallAttached(bool attached) => ballAttached = attached;
 
 
-        #endregion
 
-        #region Game State
+      //  #region Game State
 
         public bool IsGamePaused() => !gameRunning;
         public void SetGamePaused(bool paused) => gameRunning = paused;
-        #endregion
 
-        #region Camera
+     //   #region Camera
         public void SetCameraTarget(GameObject target) => camTarget = target;
         public GameObject GetCameraTarget() => camTarget;
-        #endregion
     }
 }

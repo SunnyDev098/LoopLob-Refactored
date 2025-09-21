@@ -17,16 +17,13 @@ namespace Core
         public static event Action OnPowerUpCollected;
         public static event Action OnPlayerDeath;
 
-        #region Invoke Methods
         public static void RaiseScoreChanged(int newScore) => OnScoreChanged?.Invoke(newScore);
         public static void RaiseCoinCollected(int totalCoins) => OnCoinCollected?.Invoke(totalCoins);
         public static void RaiseGameStarted() => OnGameStarted?.Invoke();
         public static void RaiseGameOver() => OnGameOver?.Invoke();
         public static void RaisePowerUpCollected() => OnPowerUpCollected?.Invoke();
         public static void RaisePlayerDeath() => OnPlayerDeath?.Invoke();
-        #endregion
 
-        #region Debug Helpers
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetEvents()
         {
@@ -37,6 +34,5 @@ namespace Core
             OnPowerUpCollected = null;
             OnPlayerDeath = null;
         }
-        #endregion
     }
 }

@@ -1,3 +1,4 @@
+using Gameplay.player;
 using UnityEngine;
 
 namespace Gameplay.Player
@@ -6,10 +7,14 @@ namespace Gameplay.Player
     public class BallInput : MonoBehaviour
     {
         private BallController controller;
+        private SpritePulseController spritePulseController;
+
 
         private void Awake()
         {
             controller = GetComponent<BallController>();
+            spritePulseController = GetComponent<SpritePulseController>();
+
         }
 
         private void Update()
@@ -26,10 +31,19 @@ namespace Gameplay.Player
             bool rightClick = Input.GetMouseButton(0) && Input.mousePosition.x >= Screen.width / 2f;
 
             if (leftKey || leftClick)
+            {
                 controller.RotateInFreeFlight(true);
+                spritePulseController.PlayPulse(0);
+            }
+                
 
             if (rightKey || rightClick)
+            {
                 controller.RotateInFreeFlight(false);
+                spritePulseController.PlayPulse(1);
+            }
+                
+
         }
 
         private void HandleDetachInput()
