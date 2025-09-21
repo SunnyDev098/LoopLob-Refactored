@@ -3,11 +3,11 @@ using Gameplay.Interfaces;
 using Gameplay.Player;
 using UnityEngine;
 
-public class Coin : MonoBehaviour, ICollectible
+public class Coin : MonoBehaviour, IHitBall
 {
     [SerializeField] private int value = 1;
 
-    public void OnCollected(BallController ball)
+    public void OnHitBall(BallController ball)
     {
         GameManager.Instance.AddCoin(value);
         Destroy(gameObject);

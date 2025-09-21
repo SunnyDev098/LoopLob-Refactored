@@ -7,7 +7,7 @@ using UnityEditor.UI;
 /// Cycles through a list of sprites at a fixed interval to create a beam animation.
 /// </summary>
 [RequireComponent(typeof(SpriteRenderer), typeof(AudioSource))]
-public class BeamEmitter : MonoBehaviour,IHazard
+public class BeamEmitter : MonoBehaviour, IHitBall
 {
     [Header("Animation Settings")]
     [Tooltip("Sprites to cycle through for the animation.")]
@@ -76,7 +76,7 @@ public class BeamEmitter : MonoBehaviour,IHazard
         BeamEmitter madedBeamEmitter = Instantiate(this, pos.position, Quaternion.identity);
         return madedBeamEmitter;
     }
-    public void OnHit(BallController ball)
+    public void OnHitBall(BallController ball)
     {
         EventBus.RaiseGameOver();
     }

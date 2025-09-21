@@ -16,6 +16,6 @@ public class TwinGateChild : MonoBehaviour
         if (!other.TryGetComponent<BallController>(out var ball))
             return;
 
-        parentGate?.OnTeleport(ball);
+        parentGate?.OnHitBall(ball);
     }
 }

@@ -7,7 +7,7 @@ using Gameplay.Interfaces;
 /// Moves the ball from one gate to its twin instantly.
 /// Can also spawn the twin gates at specific positions.
 /// </summary>
-public class TwinGate : MonoBehaviour, ITwinGate
+public class TwinGate : MonoBehaviour, IHitBall
 {
     [Tooltip("Cooldown to avoid rapid ping-pong teleporting.")]
     [SerializeField] private float teleportCooldown = 0.5f;
@@ -23,7 +23,7 @@ public class TwinGate : MonoBehaviour, ITwinGate
 
     private static readonly Dictionary<Transform, float> lastTeleportTimes = new();
 
-    public void OnTeleport(BallController ball)
+    public void OnHitBall(BallController ball)
     {
         if (IsOnCooldown(ball.transform) || otherGate == null)
             return;
@@ -58,7 +58,7 @@ public class TwinGate : MonoBehaviour, ITwinGate
         if (!other.TryGetComponent<BallController>(out var ball))
             return;
 
-        OnTeleport(ball);
+        OnHitBall(ball);
     }
 
     private bool IsOnCooldown(Transform obj)

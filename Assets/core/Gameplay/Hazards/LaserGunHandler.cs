@@ -6,6 +6,7 @@ public class LaserGunHandler : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip laserShotSound;
     private AudioSource audioSource;
+    // some new change2
 
     [Header("Rotation Settings")]
     [SerializeField] private bool isLeftGun = false;

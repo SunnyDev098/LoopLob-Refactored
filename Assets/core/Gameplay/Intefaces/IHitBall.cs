@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Gameplay.Interfaces
 {
-    public interface IOrbitAnchor
+    public interface IHitBall
     {
-        void OnAnchored(BallController ball);
+        void OnHitBall(BallController ball);
     }
 }
