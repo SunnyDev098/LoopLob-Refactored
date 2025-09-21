@@ -9,7 +9,10 @@ public class Spike : MonoBehaviour, IHazard
     private void FixedUpdate()
     {
         transform.Rotate(0, 0, 100 * Time.deltaTime);
-
+        // some new change
+        // some new change2
+        // some new change3
+        // some new change44
     }
     public void OnHit(BallController ball)
     {
