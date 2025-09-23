@@ -10,16 +10,43 @@ public class ChunkManager : MonoBehaviour
     }
 
     [Header("Chunk System Settings")]
-    public ChunkTier[] chunkTiers;
-    public float chunkHeight = 200f;
+    [SerializeField] private ChunkTier[] chunkTiers;
+    [SerializeField] private float chunkHeight = 50f;
+    [SerializeField] private float spawnThresholdDistance = 50f; // distance between spawns
+
+    [Header("References")]
+    [SerializeField] private Transform ball;       // assign the ball/player in Inspector
+    [SerializeField] private Transform chunksParent; // parent to keep hierarchy clean
 
     private Vector3 nextSpawnPosition;
     private int spawnedCount;
     private int[] lastPrefabIndexPerTier;
-    
+    private float lastSpawnY;
+
     private void Awake()
     {
         ResetSpawner();
+    }
+
+    private void Start()
+    {
+        // Spawn first chunk immediately
+        SpawnFirstChunk(chunksParent);
+        lastSpawnY = ball.position.y;
+    }
+
+    private void Update()
+    {
+        if (!ball) return;
+
+        float playerY = ball.position.y;
+
+        // Check if player has moved far enough to spawn a new chunk
+        if (playerY - lastSpawnY >= spawnThresholdDistance)
+        {
+            SpawnNextChunk(playerY, chunksParent);
+            lastSpawnY = playerY;
+        }
     }
 
     public void ResetSpawner()
@@ -33,7 +60,7 @@ public class ChunkManager : MonoBehaviour
         for (int i = 0; i < tierCount; i++)
             lastPrefabIndexPerTier[i] = -1;
     }
-    
+
     public void SpawnFirstChunk(Transform chunkParent)
     {
         SpawnChunkFromTier(0, chunkParent);
@@ -60,31 +87,28 @@ public class ChunkManager : MonoBehaviour
     {
         if (lastPrefabIndexPerTier == null || lastPrefabIndexPerTier.Length != chunkTiers.Length)
         {
-            Debug.LogWarning("ChunkManager not initied ");
+            Debug.LogWarning("ChunkManager not initialized");
             ResetSpawner();
         }
 
         if (chunkTiers == null || chunkTiers.Length == 0)
         {
-            Debug.LogWarning("ChunkManager  No tiers assigned");
+            Debug.LogWarning("ChunkManager has no tiers assigned");
             return;
         }
 
-        if (tierIndex >= chunkTiers.Length)
-            tierIndex = chunkTiers.Length - 1;
+        tierIndex = Mathf.Clamp(tierIndex, 0, chunkTiers.Length - 1);
 
         ChunkTier tier = chunkTiers[tierIndex];
         if (tier.chunkPrefabs == null || tier.chunkPrefabs.Length == 0)
         {
-            Debug.LogWarning($"ChunkManager Tier  has no prefabs");
+            Debug.LogWarning($"ChunkManager Tier {tier.name} has no prefabs");
             return;
         }
 
         int prefabIndex;
         if (tier.chunkPrefabs.Length == 1)
-        {
             prefabIndex = 0;
-        }
         else
         {
             do
