@@ -26,17 +26,24 @@ public class CameraFollowBall : MonoBehaviour
 
         if (!ballController.IsAnchored)
         {
-            Vector3 targetPos = new Vector3(
-                transform.position.x,
-                ball.position.y + verticalOffset,
-                transform.position.z
-            );
+            float currentCamY = transform.position.y;
+            float targetY = ball.position.y + verticalOffset;
 
-            transform.position = Vector3.Lerp(
-                transform.position,
-                targetPos,
-                Time.deltaTime * followSpeed
-            );
+            // Only update camera if ball is above the current camera position
+            if (targetY > currentCamY)
+            {
+                Vector3 targetPos = new Vector3(
+                    transform.position.x,
+                    targetY,
+                    transform.position.z
+                );
+
+                transform.position = Vector3.Lerp(
+                    transform.position,
+                    targetPos,
+                    Time.deltaTime * followSpeed
+                );
+            }
         }
     }
 

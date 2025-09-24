@@ -51,5 +51,7 @@ namespace Gameplay.Player
             if (Input.GetMouseButtonDown(0) && controller.IsAnchored)
                 controller.DetachFromAnchor();
         }
+
+       
     }
 }

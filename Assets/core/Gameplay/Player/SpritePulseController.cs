@@ -15,6 +15,7 @@ namespace Gameplay.player
         [SerializeField] private float minScaleX = 2f;
         [SerializeField] private float maxScaleX = 3.5f;
         [SerializeField] private float returnDuration = 0.25f;
+        [SerializeField] GameObject RotationVFX;
 
         // Tracks the per-renderer return coroutines
         private Coroutine[] returnCoroutines = new Coroutine[2];
@@ -36,6 +37,8 @@ namespace Gameplay.player
 
             // Start a new return animation
             returnCoroutines[spriteIndex] = StartCoroutine(ReturnToRest(spriteIndex));
+            VFXMaker();
+
         }
 
         /// <summary>
@@ -81,6 +84,11 @@ namespace Gameplay.player
         private bool IsValidIndex(int index)
         {
             return index >= 0 && index < spriteRenderers.Length;
+        }
+        private void VFXMaker()
+        {
+            GameObject vfx_hit = Instantiate(RotationVFX, transform.position, Quaternion.identity);
+            Destroy(vfx_hit, 1);
         }
     }
 

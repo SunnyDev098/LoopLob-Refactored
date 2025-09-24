@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      milkyGalexy_0: -2102338492997499097
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

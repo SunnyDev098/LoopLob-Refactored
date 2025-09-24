@@ -9,6 +9,7 @@ public class CameraWidthFitter : MonoBehaviour
 {
     [SerializeField] private float desiredHalfWidth = 10f; // Half of full width to view
     public Transform TopBar ; // TopBarTransform to use in rocket launcher
+    public Transform BottomBar ; 
     private Camera cam;
 
     private async void Awake()
@@ -16,7 +17,7 @@ public class CameraWidthFitter : MonoBehaviour
         cam = GetComponent<Camera>();
         AdjustSize();
         await Task.Delay(100);
-        TopBarSetter();
+        BarSetter();
     }
 
   
@@ -26,9 +27,11 @@ public class CameraWidthFitter : MonoBehaviour
         cam.orthographicSize = desiredHalfWidth / cam.aspect;
     }
 
-    private void TopBarSetter()
+    private void BarSetter()
     {
         float topEdge = Camera.main.transform.position.y + Camera.main.orthographicSize;
         TopBar.transform.position = new Vector2(0, topEdge);
+        float BottomEdge = Camera.main.transform.position.y - Camera.main.orthographicSize;
+        BottomBar.transform.position = new Vector2(0, BottomEdge);
     }
 }

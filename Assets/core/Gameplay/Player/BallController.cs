@@ -23,6 +23,9 @@ namespace Gameplay.Player
         private Vector2 moveDirection;   // current free-flight direction
         private Vector2 tangentDirection; // tangent at detach moment
 
+        [SerializeField] private AuraHandler auraHandler;
+
+        
         private void Reset()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -37,6 +40,7 @@ namespace Gameplay.Player
 
         private void Update()
         {
+            if(GameManager.Instance.IsGameOver) return;
             if (!isAnchored)
             {
                 // Transform-based free flight movement
@@ -103,7 +107,7 @@ namespace Gameplay.Player
 
             moveDirection = Vector2.zero;
             rb.linearVelocity = Vector2.zero;
-
+            OnBallAnchoredToPlanet();
             GameManager.Instance.SetBallAttached(true);
         }
 
@@ -116,6 +120,7 @@ namespace Gameplay.Player
 
             anchorPlanet = null;
             isAnchored = false;
+            OnBallReleasedFromPlanet();
 
             GameManager.Instance.SetBallAttached(false);
             EventBus.RaiseGameStarted();
@@ -141,6 +146,15 @@ namespace Gameplay.Player
             moveDirection = Vector2.zero;
         }
 
+        private void OnBallReleasedFromPlanet()
+        {
+            auraHandler.StartAura();
+        }
+
+        private void OnBallAnchoredToPlanet()
+        {
+            auraHandler.ResetAura();
+        }
         // ———————————————————————— Getters/Setters ———————————————————————— //
 
         public void SetMoveDirection(Vector2 newDir) => moveDirection = newDir.normalized;
