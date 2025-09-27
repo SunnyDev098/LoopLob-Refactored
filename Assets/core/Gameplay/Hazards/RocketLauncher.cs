@@ -106,11 +106,11 @@ namespace Gameplay.player {
             if (audioSource != null && warningSfx != null)
                 audioSource.PlayOneShot(warningSfx);
         }
-
         public void OnHitBall(BallController ballController)
         {
-            IsTriggered = true;
+           IsTriggered = true;
         }
+
     }
 
 }

@@ -45,7 +45,7 @@ namespace Gameplay.Player
 
         private void Start()
         {
-            startPosition = transform.position;
+            startPosition = new Vector3(0, transform.position.y, transform.position.z) ;
 
             if (movementCurve == null || movementCurve.length == 0)
                 movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -78,7 +78,7 @@ namespace Gameplay.Player
             tY += Time.deltaTime / Mathf.Max(0.0001f, yDuration);
             float yOffset = Mathf.Lerp(-yRange, yRange, movementCurve.Evaluate(Mathf.PingPong(tY, 1f)));
 
-            transform.position = startPosition + new Vector3(xOffset, yOffset, 0f);
+            transform.position =  startPosition + new Vector3(xOffset, yOffset, 0f);
         }
 
         private void CycleSprites(BallController ball)

@@ -90,7 +90,7 @@ namespace Gameplay.player
             // Trigger game-over via EventBus
             if (triggerGameOverOnLimit)
             {
-                EventBus.RaiseGameOver();
+              //  EventBus.RaiseGameOver();
             
             }
         }

@@ -27,8 +27,8 @@ namespace Gameplay.Player
         {
             bool leftKey = Input.GetKey(KeyCode.LeftArrow);
             bool rightKey = Input.GetKey(KeyCode.RightArrow);
-            bool leftClick = Input.GetMouseButton(0) && Input.mousePosition.x < Screen.width / 2f;
-            bool rightClick = Input.GetMouseButton(0) && Input.mousePosition.x >= Screen.width / 2f;
+            bool leftClick = Input.GetMouseButtonDown(0) && Input.mousePosition.x < Screen.width / 2f;
+            bool rightClick = Input.GetMouseButtonDown(0) && Input.mousePosition.x >= Screen.width / 2f;
 
             if (leftKey || leftClick)
             {

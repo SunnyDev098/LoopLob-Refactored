@@ -8,7 +8,8 @@ namespace Gameplay.Player
     {
         [Header("Movement Settings")]
         [SerializeField] private float moveSpeed = 20f;       // Linear speed after release
-        [SerializeField] private float rotationSpeed = 200f; // Orbit speed in degrees/sec
+        [SerializeField] private float rotationSpeed = 200; // Orbit speed in degrees/sec
+        [SerializeField] private float freeBallrotationSpeed = 200; // Orbit speed in degrees/sec
 
         [Header("References")]
         [SerializeField] private Rigidbody2D rb;
@@ -137,7 +138,7 @@ namespace Gameplay.Player
         {
             if (isAnchored || GameManager.Instance.IsGamePaused()) return;
 
-            float delta = (toLeft ? 1f : -1f) * rotationSpeed * Time.deltaTime;
+            float delta = (toLeft ? 1f : -1f) * freeBallrotationSpeed * Time.deltaTime;
             moveDirection = Quaternion.Euler(0f, 0f, delta) * moveDirection;
         }
 

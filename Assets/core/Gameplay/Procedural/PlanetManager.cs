@@ -35,7 +35,7 @@ public class PlanetManager : MonoBehaviour
 
 
         ///  added from now on the level making system goes like this:
-        chunkManager.SpawnFirstChunk(transform);
+       // chunkManager.SpawnFirstChunk(transform);
 
 
 
@@ -101,7 +101,7 @@ public class PlanetManager : MonoBehaviour
 
 
       ////  here is new chunk manager system calling
-        chunkManager.SpawnNextChunk(ball.transform.position.y, transform);
+      //  chunkManager.SpawnNextChunk(ball.transform.position.y, transform);
 
     }
 

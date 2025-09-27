@@ -1,15 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Threading.Tasks;
 
 public class LaserGunHandler : MonoBehaviour
 {
     [Header("Audio")]
     [SerializeField] private AudioClip laserShotSound;
     private AudioSource audioSource;
-    // some new change2
 
     [Header("Rotation Settings")]
-    [SerializeField] private bool isLeftGun = false;
+    [SerializeField] public bool isLeftGun = false;
     [SerializeField] private float minAimAngle = -25f;
     [SerializeField] private float maxAimAngle = 25f;
     [SerializeField] private float rotationSpeed = 40f; // degrees per second
@@ -27,17 +27,22 @@ public class LaserGunHandler : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        if (audioSource != null)
-        {
-          //  audioSource.volume = game_manager_scr.sfx_volume * 3f;
-        }
 
+      
         yRotationBase = isLeftGun ? 0 : 180;
     }
 
-    private void Start()
+    private async void Start()
     {
         StartCoroutine(RotateAndShootRoutine());
+
+        await Task.Delay(200);
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (isLeftGun && sr != null)
+        {
+            sr.flipX = true;
+        }
+
     }
 
     private IEnumerator RotateAndShootRoutine()
@@ -45,10 +50,8 @@ public class LaserGunHandler : MonoBehaviour
         while (true)
         {
             targetAngle = Random.Range(minAimAngle, maxAimAngle);
-
             yield return RotateToAngle(targetAngle);
 
-            // Could be multiple shots, but set to 1 for now
             FireProjectile();
             yield return new WaitForSeconds(timeBetweenShots);
         }
@@ -89,7 +92,8 @@ public class LaserGunHandler : MonoBehaviour
         }
 
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
-        Vector2 shootDirection = transform.right; // "forward" in Unity 2D
+        // Determine shoot direction
+        Vector2 shootDirection = isLeftGun ? -transform.right : transform.right;
 
         if (rb != null)
         {
