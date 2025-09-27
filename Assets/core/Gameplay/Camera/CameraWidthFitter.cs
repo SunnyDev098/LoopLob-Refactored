@@ -12,15 +12,17 @@ public class CameraWidthFitter : MonoBehaviour
     public Transform BottomBar ; 
     private Camera cam;
 
-    private async void Awake()
+    private  void Awake()
     {
         cam = GetComponent<Camera>();
         AdjustSize();
-        await Task.Delay(100);
+    }
+    private void Start()
+    {
         BarSetter();
+
     }
 
-  
     private void AdjustSize()
     {
         // Orthographic size is "half height", height = width / aspect

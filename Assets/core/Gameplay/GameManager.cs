@@ -2,6 +2,7 @@ namespace Core
 {
     using System.Collections.Generic;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
     using UnityEngine.UI;
 
     public class GameManager : MonoBehaviour
@@ -67,13 +68,12 @@ namespace Core
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
             }
-            else
+            else if (Instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            IsGameOver = false;
             LoadSettings();
             TotalPoints = 0;
         }
@@ -104,9 +104,6 @@ namespace Core
 
             IsGameOver = true;
             SetGamePaused(true);
-            retryBtn.gameObject.SetActive(true);
-            backToMenuBtn.gameObject.SetActive(true);
-            sendMessageBtn.gameObject.SetActive(true);
             Debug.Log($"Game Over! Final score: {finalScore}");
         }
         private void OnEnable()
@@ -128,8 +125,23 @@ namespace Core
             IsGameOver = false;
             TotalPoints = 0;
         }
+        public void ResetGameAndScene()
+        {
+            IsGameOver = false;
+            TotalPoints = 0;
+            currentScore = 0;
+            coinNumber = 0;
+            gameRunning = true;
+            isShieldActive = false;
+            isLaserActive = false;
+            isMagnetActive = false;
 
-      //  #region Scores & Currency
+            EventBus.RaiseScoreChanged(0);
+            EventBus.RaiseCoinCollected(0);
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentSceneIndex);
+        }
+        //  #region Scores & Currency
         public void AddCoin(int amount) => coinNumber += amount;
         public int GetCoinCount() => coinNumber;
         public void SetBestScore(int score) => bestScore = score;

@@ -1,11 +1,14 @@
 using Gameplay.Interfaces;
 using Gameplay.Player;
+using TMPro;
 using UnityEngine;
 
 public class PlanetAnchor : MonoBehaviour, IHitBall
 {
     [SerializeField] private GameObject scoreObject;
     private bool isItFirstAttach;
+    private static int lastScoreBallY;
+
     private void Start()
     {
         isItFirstAttach = true;
@@ -20,13 +23,24 @@ public class PlanetAnchor : MonoBehaviour, IHitBall
         if (isItFirstAttach)
         {
             isItFirstAttach =false;
-            createScore();
+
+            int currentBallY = (int)ball.transform.position.y;
+            if (currentBallY > lastScoreBallY)
+            {
+                createScore((currentBallY - lastScoreBallY));
+                lastScoreBallY = currentBallY;
+                Core.EventBus.RaiseScoreChanged(currentBallY);
+
+
+            }
+           
         }
 
     }
 
-    private void createScore()
+    private void createScore(int plusScore)
     {
-        Instantiate(scoreObject, transform.position, Quaternion.identity,transform);
+       GameObject madedScore = Instantiate(scoreObject, transform.position, Quaternion.identity);
+        madedScore.gameObject.GetComponent<ScoreObjectHandler>().text1.text ="+"+ plusScore.ToString();
     }
 }
