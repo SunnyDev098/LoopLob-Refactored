@@ -1,10 +1,16 @@
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ChunkManager : MonoBehaviour
 {
+
     [Header("Chunk System Settings")]
-    [SerializeField] public GameObject chunkPrefab;  // Single chunk prefab for spawning
+    [SerializeField] public List<Chunk> chunkPrefabs;
+    [SerializeField] public List<Chunk> FirstChunkPrefabs;
+    [SerializeField] public List<Chunk> LoadedChunks; 
     [SerializeField] private float chunkHeight = 50f; // Height of each chunk
     [SerializeField] private float spawnThresholdDistance = 50f; // Distance the player must move to spawn a new chunk
 
@@ -12,15 +18,13 @@ public class ChunkManager : MonoBehaviour
     [SerializeField] private Transform ball;           // Reference to the ball/player
     [SerializeField] private Transform chunksParent;   // Parent to keep hierarchy clean
 
-    [SerializeField] private float yOfsset =10;
     private Vector3 nextSpawnPosition;  // The next spawn position for the chunk
     private float lastSpawnY;           // Last Y position of the ball to track distance
 
     private void Start()
     {
-        lastSpawnY = ball.position.y;
-        // Spawn the first chunk immediately
-        SpawnChunk();
+        lastSpawnY = ball.position.y- FirstChunkPrefabs[0].height;
+        SpawnChunk(FirstChunkPrefabs[Random.RandomRange(0, FirstChunkPrefabs.Count)]);
     }
 
     private void Update()
@@ -29,24 +33,41 @@ public class ChunkManager : MonoBehaviour
 
         float playerY = ball.position.y;
 
-        // Check if player has moved far enough to spawn a new chunk
         if (playerY - lastSpawnY  >= spawnThresholdDistance)
         {
-            SpawnChunk();
+            spawnNextChunk();
             lastSpawnY = playerY;
+
+            if(LoadedChunks.Count>1  && LoadedChunks[0].getTop()<playerY - spawnThresholdDistance)
+            {
+                Destroy(LoadedChunks[0]);
+            }
+
         }
+
+    }
+    private void spawnNextChunk()
+    {
+        var chunk = chunkPrefabs[Random.RandomRange(0, chunkPrefabs.Count)];
+        SpawnChunk(chunk);
+
+
+
     }
 
-    // Spawn a chunk at the next spawn position
-    private void SpawnChunk()
+
+    private void SpawnChunk(Chunk prefab)
     {
         Debug.Log("someChunk Just Maded!");
-        // Instantiate the chunk at the next spawn position
-       GameObject madedChunk = Instantiate(chunkPrefab, nextSpawnPosition, Quaternion.identity, chunksParent);
-       // madedChunk.GetComponent<PlanetGenerator>().difficulty = ball.position.y / 5000;
-        madedChunk.GetComponent<PlanetGenerator>().difficulty = 1;
-        madedChunk.GetComponent<PlanetGenerator>().GenerateCaller(ball.position.y+ yOfsset, madedChunk.transform) ;
-        // Update the next spawn position by adding chunkHeight to the Y value
+        GameObject madedChunk = Instantiate(prefab.gameObject, nextSpawnPosition, Quaternion.identity, chunksParent);
         nextSpawnPosition.y += chunkHeight;
+
+
+        LoadedChunks.Add(prefab);
+    }
+
+    private void DestroyChunk(Chunk chunk)
+    {
+        LoadedChunks.Remove(chunk);
     }
 }

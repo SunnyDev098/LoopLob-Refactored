@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8175074709004667675
 Transform:
   m_ObjectHideFlags: 0
@@ -97,8 +97,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1494297573563153972}
   - component: {fileID: 3183439888894182937}
+  - component: {fileID: -5752031176604175403}
   m_Layer: 0
-  m_Name: Chunk01 1
+  m_Name: Chunk01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,13 +140,26 @@ MonoBehaviour:
   safeEdgeMargin: 0.5
   minObjectSpacing: 2.5
   minPlanetVerticalSpacing: 5
-  planetPrefab: {fileID: 0}
+  planetPrefab: {fileID: 6555924651408547538, guid: 67786bab41322624db12dc21f44d781d, type: 3}
   spikePrefab: {fileID: 5500117242909943883, guid: 97b649a2f1ca1564587ccf707ac9fcb7, type: 3}
   blackHolePrefab: {fileID: 6621120231972223764, guid: d218994ec09402541a65db9884a2f1f8, type: 3}
   laserGunPrefab: {fileID: 980303768243886007, guid: 7717afbe547dea4449825351d177c619, type: 3}
-  alienShipPrefab: {fileID: 0}
+  alienShipPrefab: {fileID: 6153084849508170010, guid: 202385ae6d5352c49b9d338770a35d65, type: 3}
   missilePrefab: {fileID: 4321580585380483403, guid: 5158331f58046694d873b44acec89c21, type: 3}
   beamEmitterPrefab: {fileID: 1755857207460168140, guid: 1d4fe635448c8fa4c974c8d4496b5831, type: 3}
+--- !u!114 &-5752031176604175403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3154699725939519429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0a5a72a12aba34f8a557dcee7243b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  height: 50
 --- !u!1 &7544209497150955345
 GameObject:
   m_ObjectHideFlags: 0

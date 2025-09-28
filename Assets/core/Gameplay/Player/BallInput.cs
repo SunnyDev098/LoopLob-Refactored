@@ -8,12 +8,14 @@ namespace Gameplay.Player
     {
         private BallController controller;
         private SpritePulseController spritePulseController;
+        private BallAudioHandler ballAudioHandler;
 
 
         private void Awake()
         {
             controller = GetComponent<BallController>();
             spritePulseController = GetComponent<SpritePulseController>();
+            ballAudioHandler = GetComponent<BallAudioHandler>();
 
         }
 
@@ -34,15 +36,19 @@ namespace Gameplay.Player
             {
                 controller.RotateInFreeFlight(true);
                 spritePulseController.PlayPulse(0);
+                ballAudioHandler.playRotation();
+
             }
-                
+
 
             if (rightKey || rightClick)
             {
                 controller.RotateInFreeFlight(false);
                 spritePulseController.PlayPulse(1);
+                ballAudioHandler.playRotation();
+
             }
-                
+
 
         }
 

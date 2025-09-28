@@ -1,6 +1,7 @@
 using Core;
 using Gameplay.Interfaces;
 using Gameplay.Player;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
@@ -25,7 +26,6 @@ public class BlackHole : MonoBehaviour, IAttractor
     );
 
     [Header("Delay & Debug")]
-    [SerializeField] private float attractionDelay = 0.5f;
     [SerializeField] private bool showDebugGizmos = true;
     private AudioSource audioSource;
     private float enterTime;
@@ -35,10 +35,11 @@ public class BlackHole : MonoBehaviour, IAttractor
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnEnable()
+    private async void OnEnable()
     {
+        await Task.Delay(200);
         if (audioSource != null)
-            audioSource.volume = GameManager.Instance.SfxVolume * 3f;
+            audioSource.volume = GameManager.Instance.SfxVolume ;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -50,8 +51,7 @@ public class BlackHole : MonoBehaviour, IAttractor
     public void OnAttracted(BallController ball)
     {
         // Delay before starting attraction
-        if (Time.time < enterTime + attractionDelay)
-            return;
+       
 
         Vector2 toCenter = (Vector2)transform.position - (Vector2)ball.transform.position;
         float distance = toCenter.magnitude;
@@ -65,7 +65,7 @@ public class BlackHole : MonoBehaviour, IAttractor
         );
 
         float curveMultiplier = attractionCurve.Evaluate(normalizedDistance);
-        float attractionFactor = curveMultiplier * 0.7f * attractionStrength * Time.deltaTime;
+        float attractionFactor = curveMultiplier  * attractionStrength * Time.deltaTime;
 
         Vector2 centerDirection = toCenter.normalized;
         Vector2 currentDirection = ball.GetMoveDirection();

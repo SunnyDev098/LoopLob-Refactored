@@ -36,9 +36,9 @@ namespace Gameplay.player {
         private void Start()
         {
             if (audioSource != null)
-                audioSource.volume = GameManager.Instance.GetSfxVolume() * sfxVolumeMultiplier;
+                audioSource.volume = GameManager.Instance.SfxVolume * sfxVolumeMultiplier;
 
-            topBar = GameManager.Instance.TopBar;
+            topBar = GameManager.Instance.TopBar.transform;
             GetComponent<SpriteRenderer>().enabled = false;
         }
         private void Update()
@@ -85,7 +85,7 @@ namespace Gameplay.player {
             // Adjust missile audio volume
             var missileAudio = missile.GetComponent<AudioSource>();
             if (missileAudio != null)
-                missileAudio.volume = GameManager.Instance.GetSfxVolume() * sfxVolumeMultiplier;
+                missileAudio.volume = GameManager.Instance.SfxVolume * sfxVolumeMultiplier;
 
             // Move missile down over time
             float elapsed = 0f;

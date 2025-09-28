@@ -10,14 +10,12 @@ namespace Core
         public static GameManager Instance { get; private set; }
 
         [Header("UI References")]
-        [SerializeField] private Button backToMenuBtn;
-        [SerializeField] private Button sendMessageBtn;
-        [SerializeField] private Button retryBtn;
+      
         [SerializeField] private GameObject powerUpStuff;
         [SerializeField] public AudioSource audioSource;
         public GameObject Ball;
         public GameObject Camera;
-        public Transform TopBar;
+        public GameObject TopBar;
 
         private Dictionary<string, string> globalUserMessageDic = new();
         private bool ghostMessagesCollected;
@@ -60,9 +58,10 @@ namespace Core
         public int NextDangerZoneHeight { get => nextDangerZoneHeight; set => nextDangerZoneHeight = value; }
         public bool CheckForDangerZone { get => checkForDangerZone; set => checkForDangerZone = value; }
 
-      //  #region Singleton
         private void Awake()
         {
+           
+
             if (Instance == null)
             {
                 Instance = this;
@@ -74,10 +73,12 @@ namespace Core
                 return;
             }
 
-            LoadSettings();
-            TotalPoints = 0;
-        }
 
+            
+            LoadSettings(); 
+        }
+     
+       
         private void Start()
         {
             gameRunning = true;
@@ -109,17 +110,26 @@ namespace Core
         private void OnEnable()
         {
             EventBus.OnGameOver += HandleGameOver;
+            SceneManager.sceneLoaded += OnSceneLoaded;
+
         }
 
         private void OnDisable()
         {
             EventBus.OnGameOver -= HandleGameOver;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+
         }
         private void HandleGameOver()
         {
             EndGame(GetCurrentScore()); // Or whatever finalScore source you have
         }
-
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            Ball = GameObject.FindGameObjectWithTag("Ball");
+            Camera = GameObject.FindGameObjectWithTag("MainCamera");
+            TopBar = GameObject.FindGameObjectWithTag("TopBar");
+        }
         public void ResetGame()
         {
             IsGameOver = false;

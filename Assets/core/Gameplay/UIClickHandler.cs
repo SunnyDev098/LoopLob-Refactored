@@ -33,8 +33,11 @@ public class UIButtonClickManager : MonoBehaviour
 
     }
     private void OnRetryClicked() {
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex);
+       
+        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(sceneIndex);
+
+
         Core.GameManager.Instance.ResetGameAndScene();
     }
     private void OnMenuClicked() => Debug.Log("Menu button clicked.");

@@ -9,7 +9,7 @@ public class LaserGunHandler : MonoBehaviour
     private AudioSource audioSource;
 
     [Header("Rotation Settings")]
-    [SerializeField] public bool isLeftGun = false;
+    [SerializeField] public bool isLeftGun = false ;
     [SerializeField] private float minAimAngle = -25f;
     [SerializeField] private float maxAimAngle = 25f;
     [SerializeField] private float rotationSpeed = 40f; // degrees per second

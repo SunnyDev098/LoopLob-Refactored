@@ -2,17 +2,18 @@ using UnityEngine;
 
 public class MusicPlayer : MonoBehaviour
 {
-    public AudioClip musicClip;
+    public AudioClip musicClip;   // Assign in Inspector
     private static MusicPlayer instance;
     private AudioSource audioSource;
-    void Awake()
+
+    private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject); // persist across scenes
 
-            // Use existing AudioSource if present, else add one
+            // Use existing AudioSource or add one
             audioSource = GetComponent<AudioSource>();
             if (audioSource == null)
                 audioSource = gameObject.AddComponent<AudioSource>();
@@ -20,13 +21,14 @@ public class MusicPlayer : MonoBehaviour
             audioSource.clip = musicClip;
             audioSource.loop = true;
 
-            // Set volume from PlayerPrefs or use 0.5f by default
+            // Set volume from PlayerPrefs or use default
             audioSource.volume = PlayerPrefs.GetFloat("music_volume", 0.5f);
 
             audioSource.Play();
         }
         else
         {
+            // Prevent duplicates on scene reload
             Destroy(gameObject);
         }
     }
@@ -38,5 +40,26 @@ public class MusicPlayer : MonoBehaviour
             instance.audioSource.volume = volume;
             PlayerPrefs.SetFloat("music_volume", volume);
         }
+    }
+
+    public static void ChangeTrack(AudioClip newClip)
+    {
+        if (instance != null && instance.audioSource != null)
+        {
+            instance.audioSource.clip = newClip;
+            instance.audioSource.Play();
+        }
+    }
+
+    public static void StopMusic()
+    {
+        if (instance != null && instance.audioSource.isPlaying)
+            instance.audioSource.Stop();
+    }
+
+    public static void ResumeMusic()
+    {
+        if (instance != null && !instance.audioSource.isPlaying)
+            instance.audioSource.Play();
     }
 }

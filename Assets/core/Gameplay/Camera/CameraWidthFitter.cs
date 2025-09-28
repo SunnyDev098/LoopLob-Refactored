@@ -31,9 +31,12 @@ public class CameraWidthFitter : MonoBehaviour
 
     private void BarSetter()
     {
-        float topEdge = Camera.main.transform.position.y + Camera.main.orthographicSize;
-        TopBar.transform.position = new Vector2(0, topEdge);
-        float BottomEdge = Camera.main.transform.position.y - Camera.main.orthographicSize;
-        BottomBar.transform.position = new Vector2(0, BottomEdge);
+        if (TopBar != null && BottomBar != null)
+        {
+            float topEdge = Camera.main.transform.position.y + Camera.main.orthographicSize;
+            TopBar.transform.position = new Vector2(0, topEdge);
+            float BottomEdge = Camera.main.transform.position.y - Camera.main.orthographicSize;
+            BottomBar.transform.position = new Vector2(0, BottomEdge);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class PlanetGenerator : MonoBehaviour
 {
@@ -27,8 +28,14 @@ public class PlanetGenerator : MonoBehaviour
     private float leftBound, rightBound;
     private List<Vector2> occupiedPositions = new List<Vector2>();
 
-    public void GenerateCaller(float baseY, Transform parent)
+    private void Start()
     {
+        GenerateCaller(GetComponent<Chunk>().getTop() - GetComponent<Chunk>().height, transform);
+    }
+    public async void GenerateCaller(float baseY, Transform parent)
+    {
+
+        await Task.Delay(200);
         StartCoroutine(GenerateChunkCoroutine(baseY, parent));
     }
 
@@ -111,7 +118,7 @@ public class PlanetGenerator : MonoBehaviour
                 float yPos = baseY + Random.Range(0f, chunkHeight);
                 // Decide which side to place the laser
                 bool isLeft = Random.value < 0.5f;
-                float xPos = isLeft ? -4.35f : 4.35f;
+                float xPos = isLeft ? -5f : 5f;
                 Vector2 pos = new Vector2(xPos, yPos);
 
                 if (!IsPositionSafe(pos, minObjectSpacing)) { i--; continue; }

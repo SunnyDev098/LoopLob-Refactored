@@ -24,7 +24,9 @@ namespace Gameplay.Player
         private Vector2 moveDirection;   // current free-flight direction
         private Vector2 tangentDirection; // tangent at detach moment
 
+
         [SerializeField] private AuraHandler auraHandler;
+        [SerializeField] private BallAudioHandler ballAudioHandler;
 
         
         private void Reset()
@@ -92,10 +94,14 @@ namespace Gameplay.Player
             if (pos.x >= bounceXLimit )
             {
                 moveDirection.x = -moveDirection.x;
+                ballAudioHandler.playBounce();
+
             }
             else if (pos.x <= -bounceXLimit)
             {
                 moveDirection.x = -moveDirection.x;
+                ballAudioHandler.playBounce();
+
             }
         }
         // ———————————————————————— Public Actions ———————————————————————— //
@@ -110,6 +116,7 @@ namespace Gameplay.Player
             rb.linearVelocity = Vector2.zero;
             OnBallAnchoredToPlanet();
             GameManager.Instance.SetBallAttached(true);
+            ballAudioHandler.playAttach();
         }
 
         public void DetachFromAnchor()
