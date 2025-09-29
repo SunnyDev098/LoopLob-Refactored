@@ -27,8 +27,9 @@ public class LaserGunHandler : MonoBehaviour
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+        audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
 
-      
+
         yRotationBase = isLeftGun ? 0 : 180;
     }
 

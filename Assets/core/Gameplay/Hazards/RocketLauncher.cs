@@ -36,7 +36,7 @@ namespace Gameplay.player {
         private void Start()
         {
             if (audioSource != null)
-                audioSource.volume = GameManager.Instance.SfxVolume * sfxVolumeMultiplier;
+                audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
 
             topBar = GameManager.Instance.TopBar.transform;
             GetComponent<SpriteRenderer>().enabled = false;

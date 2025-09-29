@@ -39,7 +39,7 @@ public class BlackHole : MonoBehaviour, IAttractor
     {
         await Task.Delay(200);
         if (audioSource != null)
-            audioSource.volume = GameManager.Instance.SfxVolume ;
+            audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
     }
 
     private void OnTriggerEnter2D(Collider2D other)

@@ -9,13 +9,15 @@ public class PlanetAnchor : MonoBehaviour, IHitBall
     private bool isItFirstAttach;
     private static int lastScoreBallY;
 
+  
     private void Start()
     {
         isItFirstAttach = true;
+        lastScoreBallY = 0;
     }
     public void OnHitBall(BallController ball)
     {
-       
+        Debug.Log("weeeeeeeeee");
         ball.AnchorTo(transform);
         ball.SetOrbitRadius(GetComponent<PlanetAttribute>().orbitRadius);
         GetComponent<PlanetAttribute>().ActivateOrbitVisual();

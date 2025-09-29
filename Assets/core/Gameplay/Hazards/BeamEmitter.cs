@@ -49,7 +49,8 @@ public class BeamEmitter : MonoBehaviour, IHitBall
     private void SetInitialVolume()
     {
         if (audioSource != null)
-            audioSource.volume *= GameManager.Instance.SfxVolume * 3f;
+            audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
+
     }
 
     private void SetInitialSprite()

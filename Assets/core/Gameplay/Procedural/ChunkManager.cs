@@ -40,7 +40,7 @@ public class ChunkManager : MonoBehaviour
 
             if(LoadedChunks.Count>1  && LoadedChunks[0].getTop()<playerY - spawnThresholdDistance)
             {
-                Destroy(LoadedChunks[0]);
+                Destroy(LoadedChunks[0].gameObject);
             }
 
         }

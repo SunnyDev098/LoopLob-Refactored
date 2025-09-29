@@ -3,7 +3,7 @@ using UnityEngine;
 public class MusicPlayer : MonoBehaviour
 {
     public AudioClip musicClip;   // Assign in Inspector
-    private static MusicPlayer instance;
+    public static MusicPlayer instance;
     private AudioSource audioSource;
 
     private void Awake()
