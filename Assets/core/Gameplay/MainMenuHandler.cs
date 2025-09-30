@@ -5,18 +5,19 @@ public class MainMenuHandler : MonoBehaviour
 {
     public Button PlayButton;
     public Button OptionsButton;
-    public Button Scoreboard;
+    public Button ScoreboardButton;
 
     public GameObject mainMenuPanel;
-    public GameObject scoreboardPanel;
     public GameObject optionsPanel;
+    public GameObject scoreboardPanel;
+
     public GameObject sceneDecoration;
 
     private void Awake()
     {
         if (PlayButton != null) PlayButton.onClick.AddListener(OnPlayClicked);
         if (OptionsButton != null) OptionsButton.onClick.AddListener(OnOptionClicked);
-        if (Scoreboard != null) Scoreboard.onClick.AddListener(OnOptionClicked);
+        if (ScoreboardButton != null) ScoreboardButton.onClick.AddListener(OnOptionClicked);
 
 
     }
@@ -25,7 +26,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         if (PlayButton != null) PlayButton.onClick.RemoveListener(OnPlayClicked);
         if (OptionsButton != null) OptionsButton.onClick.RemoveListener(OnOptionClicked);
-        if (Scoreboard != null) Scoreboard.onClick.RemoveListener(OnScoreboardClicked);
+        if (ScoreboardButton != null) ScoreboardButton.onClick.RemoveListener(OnScoreboardClicked);
         
     }
 
@@ -36,38 +37,25 @@ public class MainMenuHandler : MonoBehaviour
 
     private void OnOptionClicked()
     {
-        Debug.Log("options button clicked!");
         ShowOptions();
+        sceneDecoration.SetActive(false);
     }
 
     private void OnScoreboardClicked()
     {
-        Debug.Log("scpreboard button clicked!");
         ShowScoreboard();
+        sceneDecoration.SetActive(false);
     }
 
 
     public void ShowMainMenu()
     {
-        mainMenuPanel.SetActive(true);
+        OptionSelectionService.SelectOption(transform.parent.gameObject, "MainMenuPanel");
         sceneDecoration.SetActive(true);
-        scoreboardPanel.SetActive(false);
-        optionsPanel.SetActive(false);
     }
+    public void ShowOptions()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "OptionsPanel");
+    public void ShowScoreboard()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "ScoreBoardPanel");
 
-    public void ShowScoreboard()
-    {
-        mainMenuPanel.SetActive(false);
-        scoreboardPanel.SetActive(true);
-        sceneDecoration.SetActive(false);
-        optionsPanel.SetActive(false);
-    }
 
-    public void ShowOptions()
-    {
-        mainMenuPanel.SetActive(false);
-        scoreboardPanel.SetActive(false);
-        sceneDecoration.SetActive(false);
-        optionsPanel.SetActive(true);
-    }
+ 
 }

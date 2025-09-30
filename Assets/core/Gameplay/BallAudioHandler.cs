@@ -12,7 +12,6 @@ public class BallAudioHandler : MonoBehaviour
     public void playAttach() => audioSource.PlayOneShot(ballAttachSFX);
     public void playBounce() => audioSource.PlayOneShot(ballBounceSFX);
     public void playRotation() => audioSource.PlayOneShot(ballRotationSFX);
-    private void Start() => audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
   
 
 }

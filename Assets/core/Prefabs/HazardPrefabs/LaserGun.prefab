@@ -98,7 +98,7 @@ AudioSource:
   m_GameObject: {fileID: 980303768243886007}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5898127349694658016, guid: 51a3537fb8a435d4bb5453bc6e570ccc, type: 2}
   m_audioClip: {fileID: 8300000, guid: d088505795dd5164ca864ef63ebc4ac7, type: 3}
   m_Resource: {fileID: 8300000, guid: d088505795dd5164ca864ef63ebc4ac7, type: 3}
   m_PlayOnAwake: 0
@@ -199,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   laserShotSound: {fileID: 8300000, guid: d088505795dd5164ca864ef63ebc4ac7, type: 3}
+  audioSource: {fileID: 6410578616466269372}
   isLeftGun: 0
   minAimAngle: -25
   maxAimAngle: 25

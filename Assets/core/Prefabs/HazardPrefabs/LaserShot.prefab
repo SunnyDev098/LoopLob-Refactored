@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 610768632639727818}
   - component: {fileID: 2792295438617972692}
   - component: {fileID: 8785587820712357148}
+  - component: {fileID: 931394908352425563}
   m_Layer: 0
   m_Name: LaserShot
   m_TagString: laser
@@ -134,3 +135,15 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 8.5, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &931394908352425563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6558413057120206410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8cfe2249e4fd474089f31c774fe8b7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

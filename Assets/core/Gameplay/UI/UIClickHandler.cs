@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
+using Core;
 public class UIButtonClickManager : MonoBehaviour
 {
     [SerializeField] public Button retryButton;
@@ -28,18 +30,14 @@ public class UIButtonClickManager : MonoBehaviour
     {
         retryButton.gameObject.SetActive(true);
         menuButton.gameObject.SetActive(true);
-        sendMessageButton.gameObject.SetActive(true);
+      //  sendMessageButton.gameObject.SetActive(true);
      
 
     }
-    private void OnRetryClicked() {
-       
-        int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(sceneIndex);
-
-
-        Core.GameManager.Instance.ResetGameAndScene();
-    }
-    private void OnMenuClicked() => Debug.Log("Menu button clicked.");
+    private void OnRetryClicked() => SceneManager.LoadScene("CoreGame");    
+    private void OnMenuClicked(){
+        SceneManager.LoadScene("InitialScene");
+        GameManager.Instance.ResetGame();
+    } 
     private void OnSendMessageClicked() => Debug.Log("Send Message button clicked.");
 }

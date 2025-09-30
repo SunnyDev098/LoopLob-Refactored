@@ -2508,7 +2508,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: bc639f0922f405648b946ca0ec20b0c9, type: 3}
   platformPrefab: {fileID: 209447772281992785, guid: dc0155622b4d1ce499f969961bbd8d63, type: 3}
   parentContainer: {fileID: 1709488993}
-  ball: {fileID: 2051295629}
+  camera: {fileID: 519420028}
   spawnDistanceGap: 50
   startOnAwake: 1
 --- !u!4 &1709488993
@@ -2888,7 +2888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f330e532ecdc2b4a8dfaf34851e9ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
+  moveSpeed: 20
   rotationSpeed: 200
   freeBallrotationSpeed: 700
   rb: {fileID: 2051295630}
@@ -2902,7 +2902,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2051295629}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -3120,7 +3120,7 @@ AudioSource:
   m_GameObject: {fileID: 2051295629}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 5898127349694658016, guid: 51a3537fb8a435d4bb5453bc6e570ccc, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0

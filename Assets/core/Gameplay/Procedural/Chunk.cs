@@ -9,17 +9,17 @@ public class Chunk : MonoBehaviour
     public ChunkManager manager { get; set; }
     void Start()
     {
-        if (GetComponent<PlanetGenerator>() != null)
+        if (GetComponent<ChunkGenerator>() != null)
         {
     
             var theY =  getTop()/5000 ;
             if (theY > 1)
             {
-                GetComponent<PlanetGenerator>().difficulty = theY;
+                GetComponent<ChunkGenerator>().difficulty = theY;
             }
             else
             {
-                GetComponent<PlanetGenerator>().difficulty = 1;
+                GetComponent<ChunkGenerator>().difficulty = 1;
             }
         }
     }
@@ -27,18 +27,5 @@ public class Chunk : MonoBehaviour
     {
         return  transform.position.y+ height/2;
     }
-    /*
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        if(manager != null)
-        {
-            Gizmos.DrawWireCube(transform.position + Vector3.up * height/2, transform.up);
-        }
-        else
-        {
-
-        }
-    }
-    */
+   
 }

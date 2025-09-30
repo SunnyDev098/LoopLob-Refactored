@@ -6,7 +6,7 @@ public class LaserGunHandler : MonoBehaviour
 {
     [Header("Audio")]
     [SerializeField] private AudioClip laserShotSound;
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource audioSource;
 
     [Header("Rotation Settings")]
     [SerializeField] public bool isLeftGun = false ;
@@ -26,9 +26,6 @@ public class LaserGunHandler : MonoBehaviour
 
     private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
-
 
         yRotationBase = isLeftGun ? 0 : 180;
     }

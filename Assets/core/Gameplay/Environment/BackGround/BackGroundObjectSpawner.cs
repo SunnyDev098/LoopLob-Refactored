@@ -7,7 +7,7 @@ public class BackGroundObjectSpawner : MonoBehaviour
     public List<Sprite> spritesToSpawn;
     public GameObject platformPrefab;
     public Transform parentContainer;
-    public GameObject ball;
+    public GameObject camera;
 
     [Tooltip("Distance in Y before new spawn check.")]
     public float spawnDistanceGap = 250f;
@@ -21,16 +21,16 @@ public class BackGroundObjectSpawner : MonoBehaviour
     private void Start()
     {
         nextSpawnY = 50;
-        if (ball == null)
+        if (camera == null)
         {
-            Debug.LogError("ObjectSpawner requires a reference to the ball GameObject.");
+            Debug.LogError("ObjectSpawner requires a reference to the cam GameObject.");
             enabled = false;
             return;
         }
 
         if (startOnAwake && spritesToSpawn.Count > 0)
         {
-            ScheduleNextSpawn(ball.transform.position.y + spawnDistanceGap);
+            ScheduleNextSpawn(camera.transform.position.y + spawnDistanceGap);
         }
     }
     // spawning Big background objects and moving them with ball vertical movment
@@ -39,14 +39,14 @@ public class BackGroundObjectSpawner : MonoBehaviour
         if (currentIndex >= MaxObjects || spritesToSpawn.Count == 0)
             return;
 
-        if (ball.transform.position.y >= nextSpawnY)
+        if (camera.transform.position.y >= nextSpawnY)
         {
             SpawnNextObject();
         }
 
         if (currentIndex > 0)
         {
-            transform.position = new Vector3(0, ball.transform.position.y * 0.8f, -10);
+            transform.position = new Vector3(0, camera.transform.position.y * 0.8f, -10);
 
         }
 
@@ -57,7 +57,7 @@ public class BackGroundObjectSpawner : MonoBehaviour
     {
         // Random horizontal position
         float randomX = Random.Range(-3f, 3f);
-        Vector3 spawnPos = new Vector3(randomX, ball.transform.position.y +50, 30f);
+        Vector3 spawnPos = new Vector3(randomX, camera.transform.position.y +50, 30f);
 
         // Instantiate platform
         GameObject newPlatform = Instantiate(platformPrefab, spawnPos, Quaternion.identity, parentContainer);
@@ -71,7 +71,7 @@ public class BackGroundObjectSpawner : MonoBehaviour
 
         // Prepare for next spawn
         currentIndex++;
-        ScheduleNextSpawn(ball.transform.position.y + currentIndex * spawnDistanceGap);
+        ScheduleNextSpawn(camera.transform.position.y + currentIndex * spawnDistanceGap);
     }
 
     private void ScheduleNextSpawn(float yPosition)

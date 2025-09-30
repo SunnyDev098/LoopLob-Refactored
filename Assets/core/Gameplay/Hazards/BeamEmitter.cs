@@ -3,10 +3,7 @@ using UnityEngine;
 using Gameplay.Player;
 using Gameplay.Interfaces;
 using UnityEditor.UI;
-/// <summary>
-/// Cycles through a list of sprites at a fixed interval to create a beam animation.
-/// </summary>
-[RequireComponent(typeof(SpriteRenderer), typeof(AudioSource))]
+
 public class BeamEmitter : MonoBehaviour, IHitBall
 {
     [Header("Animation Settings")]
@@ -30,7 +27,6 @@ public class BeamEmitter : MonoBehaviour, IHitBall
 
     private void Start()
     {
-        SetInitialVolume();
         SetInitialSprite();
     }
 
@@ -46,12 +42,7 @@ public class BeamEmitter : MonoBehaviour, IHitBall
         }
     }
 
-    private void SetInitialVolume()
-    {
-        if (audioSource != null)
-            audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
-
-    }
+  
 
     private void SetInitialSprite()
     {

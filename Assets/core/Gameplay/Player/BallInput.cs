@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Gameplay.Player
 {
-    [RequireComponent(typeof(BallController))]
     public class BallInput : MonoBehaviour
     {
         private BallController controller;
@@ -27,8 +26,8 @@ namespace Gameplay.Player
 
         private void HandleRotationInput()
         {
-            bool leftKey = Input.GetKey(KeyCode.LeftArrow);
-            bool rightKey = Input.GetKey(KeyCode.RightArrow);
+            bool leftKey = Input.GetKeyDown(KeyCode.LeftArrow);
+            bool rightKey = Input.GetKeyDown(KeyCode.RightArrow);
             bool leftClick = Input.GetMouseButtonDown(0) && Input.mousePosition.x < Screen.width / 2f;
             bool rightClick = Input.GetMouseButtonDown(0) && Input.mousePosition.x >= Screen.width / 2f;
 

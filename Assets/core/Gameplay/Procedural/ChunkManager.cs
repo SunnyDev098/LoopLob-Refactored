@@ -10,7 +10,7 @@ public class ChunkManager : MonoBehaviour
     [Header("Chunk System Settings")]
     [SerializeField] public List<Chunk> chunkPrefabs;
     [SerializeField] public List<Chunk> FirstChunkPrefabs;
-    [SerializeField] public List<Chunk> LoadedChunks; 
+    [SerializeField] public List<GameObject> LoadedChunks; 
     [SerializeField] private float chunkHeight = 50f; // Height of each chunk
     [SerializeField] private float spawnThresholdDistance = 50f; // Distance the player must move to spawn a new chunk
 
@@ -38,9 +38,10 @@ public class ChunkManager : MonoBehaviour
             spawnNextChunk();
             lastSpawnY = playerY;
 
-            if(LoadedChunks.Count>1  && LoadedChunks[0].getTop()<playerY - spawnThresholdDistance)
+            if(LoadedChunks.Count>1  && LoadedChunks[0].GetComponent<Chunk>().getTop()<playerY - spawnThresholdDistance)
             {
-                Destroy(LoadedChunks[0].gameObject);
+             
+                DestroyChunk(LoadedChunks[0]);
             }
 
         }
@@ -63,11 +64,13 @@ public class ChunkManager : MonoBehaviour
         nextSpawnPosition.y += chunkHeight;
 
 
-        LoadedChunks.Add(prefab);
+        LoadedChunks.Add(madedChunk);
     }
 
-    private void DestroyChunk(Chunk chunk)
+    private void DestroyChunk(GameObject chunk)
     {
         LoadedChunks.Remove(chunk);
+        Destroy(chunk.gameObject);
+
     }
 }

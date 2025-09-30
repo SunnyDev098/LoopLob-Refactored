@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class MusicPlayer : MonoBehaviour
 {
@@ -6,6 +8,9 @@ public class MusicPlayer : MonoBehaviour
     public static MusicPlayer instance;
     private AudioSource audioSource;
 
+    private const string MUSIC_PREF_KEY = "MusicVolume";
+    private const string SFX_PREF_KEY = "SFXVolume";
+    [SerializeField] private AudioMixer audioMixer;
     private void Awake()
     {
         if (instance == null)
@@ -21,8 +26,6 @@ public class MusicPlayer : MonoBehaviour
             audioSource.clip = musicClip;
             audioSource.loop = true;
 
-            // Set volume from PlayerPrefs or use default
-            audioSource.volume = PlayerPrefs.GetFloat("music_volume", 0.5f);
 
             audioSource.Play();
         }
@@ -33,12 +36,27 @@ public class MusicPlayer : MonoBehaviour
         }
     }
 
-    public static void SetVolume(float volume)
+    private void Start()
     {
-        if (instance != null && instance.audioSource != null)
+        if (PlayerPrefs.HasKey(MUSIC_PREF_KEY))
         {
-            instance.audioSource.volume = volume;
-            PlayerPrefs.SetFloat("music_volume", volume);
+            audioMixer.SetFloat(MUSIC_PREF_KEY, Mathf.Lerp(-30f, 10f, PlayerPrefs.GetFloat(MUSIC_PREF_KEY))) ;
+        }
+
+        else
+        {
+            PlayerPrefs.SetFloat(MUSIC_PREF_KEY, 0.5f);
+            audioMixer.SetFloat(MUSIC_PREF_KEY, Mathf.Lerp(-30f, 10f, 0.5f));
+
+        }
+        if (PlayerPrefs.HasKey(MUSIC_PREF_KEY))
+        {
+            audioMixer.SetFloat(SFX_PREF_KEY, Mathf.Lerp(-30f, 10f, PlayerPrefs.GetFloat(SFX_PREF_KEY)));
+        }
+        else
+        {
+            PlayerPrefs.SetFloat(SFX_PREF_KEY, 0.5f);
+            audioMixer.SetFloat(SFX_PREF_KEY, Mathf.Lerp(-30f, 10f, 0.5f));
         }
     }
 

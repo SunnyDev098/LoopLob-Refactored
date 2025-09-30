@@ -4,8 +4,7 @@ using Gameplay.Player;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider2D))]
-[RequireComponent(typeof(AudioSource))]
+
 public class BlackHole : MonoBehaviour, IAttractor
 {
     [Header("Attraction Settings")]
@@ -35,12 +34,7 @@ public class BlackHole : MonoBehaviour, IAttractor
         audioSource = GetComponent<AudioSource>();
     }
 
-    private async void OnEnable()
-    {
-        await Task.Delay(200);
-        if (audioSource != null)
-            audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
-    }
+    
 
     private void OnTriggerEnter2D(Collider2D other)
     {

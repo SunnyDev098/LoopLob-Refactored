@@ -35,9 +35,7 @@ namespace Gameplay.player {
         private bool IsLaunched = false;
         private void Start()
         {
-            if (audioSource != null)
-                audioSource.volume = PlayerPrefs.GetFloat("sfx_volume");
-
+       
             topBar = GameManager.Instance.TopBar.transform;
             GetComponent<SpriteRenderer>().enabled = false;
         }
