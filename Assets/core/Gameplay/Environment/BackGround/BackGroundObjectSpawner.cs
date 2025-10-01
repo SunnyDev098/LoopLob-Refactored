@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class BackGroundObjectSpawner : MonoBehaviour
 {
@@ -14,9 +15,20 @@ public class BackGroundObjectSpawner : MonoBehaviour
 
     public bool startOnAwake = true;
 
+    [Header("Distance Banner Settings")]
+    public GameObject distanceBannerPrefab;
+    public Transform bannerParentContainer;
+
+    [Tooltip("Y interval for distance banners (default 500).")]
+    public float bannerInterval = 500f;
+
     private float nextSpawnY;
     private int currentIndex = 0;
     private const int MaxObjects = 20;
+
+    // Banner tracking
+    private float nextBannerTriggerY = 400f; // First trigger at Y=400
+    private int bannerCount = 0;
 
     private void Start()
     {
@@ -33,9 +45,13 @@ public class BackGroundObjectSpawner : MonoBehaviour
             ScheduleNextSpawn(camera.transform.position.y + spawnDistanceGap);
         }
     }
-    // spawning Big background objects and moving them with ball vertical movment
+
+    // spawning Big background objects and moving them with ball vertical movement
     private void Update()
     {
+        // Check for distance banner spawning
+        CheckAndSpawnDistanceBanner();
+
         if (currentIndex >= MaxObjects || spritesToSpawn.Count == 0)
             return;
 
@@ -47,17 +63,46 @@ public class BackGroundObjectSpawner : MonoBehaviour
         if (currentIndex > 0)
         {
             transform.position = new Vector3(0, camera.transform.position.y * 0.8f, -10);
-
         }
+    }
 
+    /// <summary>
+    /// Checks if camera has reached a banner trigger point and spawns banner if needed.
+    /// Trigger points: 400, 900, 1400, 1900, ... (Y = 500n - 100 where n = 1, 2, 3, ...)
+    /// Banner spawns at: 500, 1000, 1500, 2000, ... (Y = 500n where n = 1, 2, 3, ...)
+    /// </summary>
+    private void CheckAndSpawnDistanceBanner()
+    {
+        if (distanceBannerPrefab == null)
+            return;
 
+        // Check if camera has crossed the trigger threshold
+        if (camera.transform.position.y >= nextBannerTriggerY)
+        {
+            bannerCount++;
+
+            // Calculate banner Y position (500, 1000, 1500, ...)
+            float bannerY = bannerCount * bannerInterval;
+
+            // Spawn banner at (0, bannerY, 0)
+            Vector3 bannerPosition = new Vector3(0f, bannerY, -10f);
+
+            Transform parent = bannerParentContainer != null ? bannerParentContainer : transform;
+            GameObject banner = Instantiate(distanceBannerPrefab, bannerPosition, Quaternion.identity);
+            banner.name = $"DistanceBanner_{bannerCount * 500}m";
+            banner.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text =(bannerCount * 500).ToString()+" m"  ;
+            // Update next trigger point (400, 900, 1400, ...)
+            nextBannerTriggerY = (bannerCount * bannerInterval) + (bannerInterval - 100f);
+
+            Debug.Log($"Spawned distance banner at Y={bannerY} (trigger was Y={nextBannerTriggerY - bannerInterval + 100})");
+        }
     }
 
     private void SpawnNextObject()
     {
         // Random horizontal position
         float randomX = Random.Range(-3f, 3f);
-        Vector3 spawnPos = new Vector3(randomX, camera.transform.position.y +50, 30f);
+        Vector3 spawnPos = new Vector3(randomX, camera.transform.position.y + 50, 30f);
 
         // Instantiate platform
         GameObject newPlatform = Instantiate(platformPrefab, spawnPos, Quaternion.identity, parentContainer);
@@ -78,13 +123,11 @@ public class BackGroundObjectSpawner : MonoBehaviour
     {
         if (currentIndex == 0)
         {
-            nextSpawnY = yPosition ;
-
+            nextSpawnY = yPosition;
         }
         else
         {
             nextSpawnY = yPosition + 250;
-
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Core
         public static void RaiseCoinCollected(int totalCoins) => OnCoinCollected?.Invoke(totalCoins);
         public static void RaiseGameStarted() => OnGameStarted?.Invoke();
         public static void RaiseGameOver() => OnGameOver?.Invoke();
+     
         public static void RaisePowerUpCollected() => OnPowerUpCollected?.Invoke();
         public static void RaisePlayerDeath() => OnPlayerDeath?.Invoke();
 

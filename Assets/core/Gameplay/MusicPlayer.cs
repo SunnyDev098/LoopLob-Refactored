@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -27,7 +28,6 @@ public class MusicPlayer : MonoBehaviour
             audioSource.loop = true;
 
 
-            audioSource.Play();
         }
         else
         {
@@ -36,8 +36,11 @@ public class MusicPlayer : MonoBehaviour
         }
     }
 
-    private void Start()
+    private async void Start()
     {
+        await Task.Delay(300);
+        audioSource.Play();
+
         if (PlayerPrefs.HasKey(MUSIC_PREF_KEY))
         {
             audioMixer.SetFloat(MUSIC_PREF_KEY, Mathf.Lerp(-30f, 10f, PlayerPrefs.GetFloat(MUSIC_PREF_KEY))) ;

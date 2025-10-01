@@ -147,16 +147,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 732573bbdeb3179488b1827bd6cc63b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 0
+  difficulty: 1
   chunkHeight: 50
   chunkWidth: 10
-  safeEdgeMargin: 0.5
-  planetPrefab: {fileID: 6555924651408547538, guid: 67786bab41322624db12dc21f44d781d, type: 3}
+  cellSize: 1
+  usableCols: 7
+  planetPrefab: {fileID: 6555924651408547538, guid: 71b7322ee368a9547abc2e5f543b776a, type: 3}
   spikePrefab: {fileID: 5500117242909943883, guid: 97b649a2f1ca1564587ccf707ac9fcb7, type: 3}
   blackHolePrefab: {fileID: 6621120231972223764, guid: d218994ec09402541a65db9884a2f1f8, type: 3}
   laserGunPrefab: {fileID: 980303768243886007, guid: 7717afbe547dea4449825351d177c619, type: 3}
   alienShipPrefab: {fileID: 6153084849508170010, guid: 202385ae6d5352c49b9d338770a35d65, type: 3}
-  rocketLauncherPrefab: {fileID: 4321580585380483403, guid: 5158331f58046694d873b44acec89c21, type: 3}
+  missilePrefab: {fileID: 4321580585380483403, guid: 5158331f58046694d873b44acec89c21, type: 3}
   beamEmitterPrefab: {fileID: 1755857207460168140, guid: 1d4fe635448c8fa4c974c8d4496b5831, type: 3}
 --- !u!1 &7544209497150955345
 GameObject:

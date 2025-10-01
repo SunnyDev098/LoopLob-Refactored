@@ -3,7 +3,6 @@ namespace Gameplay.player
     using UnityEngine;
     using System.Collections;
     using Core; // for EventBus
-    using Core; // ensure you have access to GameManager if needed
 
     /// <summary>
     /// Handles an aura effect around an object by animating scale and alpha.

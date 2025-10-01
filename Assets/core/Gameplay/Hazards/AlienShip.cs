@@ -6,11 +6,9 @@ using Core;
 
 namespace Gameplay.Player
 {
-    /// <summary>
     /// Alien enemy that wanders in a PingPong pattern and cycles sprites when hitting the ball.
     /// Damage application is routed through the IHitBall interface.
-    /// </summary>
-    [RequireComponent(typeof(SpriteRenderer))]
+    
     public class AlienShip : MonoBehaviour, IHitBall
     {
         [Header("Sprites")]
@@ -56,16 +54,13 @@ namespace Gameplay.Player
             UpdateMovement();
         }
 
-        /// <summary>
-        /// Called by BallInteraction when the ball enters this object's trigger.
-        /// </summary>
+    
         public void OnHitBall(BallController ballController)
         {
-            // Respect game state
-            if (GameManager.Instance.NoDeath || GameManager.Instance.IsBallAttached())
-                return;
 
-            CycleSprites(ballController);
+
+            StartCoroutine(CycleSpritesCoroutine());
+
         }
 
         private void UpdateMovement()
@@ -81,32 +76,25 @@ namespace Gameplay.Player
             transform.position =  startPosition + new Vector3(xOffset, yOffset, 0f);
         }
 
-        private void CycleSprites(BallController ball)
-        {
-            StartCoroutine(CycleSpritesCoroutine(ball));
-        }
+      
 
-        private IEnumerator CycleSpritesCoroutine(BallController ball)
+        private IEnumerator CycleSpritesCoroutine()
         {
-            if (sprites.Length < 3 || spriteRenderer == null)
-                yield break;
 
-            // Frame sequence
             spriteRenderer.sprite = sprites[0];
-            yield return frameDelay;
+
             yield return frameDelay;
 
             spriteRenderer.sprite = sprites[1];
+
             yield return frameDelay;
 
             spriteRenderer.sprite = sprites[2];
+        
 
-            // Apply damage if ball is not shielded
             if (!GameManager.Instance.IsShieldActive())
                 EventBus.RaiseGameOver();
 
-            yield return frameDelay;
-            spriteRenderer.sprite = sprites[0];
         }
     }
 }

@@ -7,4 +7,5 @@ namespace Gameplay.Interfaces
     {
         void OnHitBall(BallController ball);
     }
+
 }

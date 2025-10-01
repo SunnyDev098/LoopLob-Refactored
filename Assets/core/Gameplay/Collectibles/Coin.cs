@@ -9,7 +9,7 @@ public class Coin : MonoBehaviour, IHitBall
 
     public void OnHitBall(BallController ball)
     {
-        GameManager.Instance.AddCoin(value);
+        ball.GetCoin();
         Destroy(gameObject);
     }
 }

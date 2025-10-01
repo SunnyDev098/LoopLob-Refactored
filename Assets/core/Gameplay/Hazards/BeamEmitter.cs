@@ -2,7 +2,6 @@ using Core;
 using UnityEngine;
 using Gameplay.Player;
 using Gameplay.Interfaces;
-using UnityEditor.UI;
 
 public class BeamEmitter : MonoBehaviour, IHitBall
 {

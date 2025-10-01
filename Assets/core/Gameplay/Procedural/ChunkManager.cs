@@ -1,18 +1,16 @@
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ChunkManager : MonoBehaviour
 {
 
     [Header("Chunk System Settings")]
+    private float lastChunkBottom;
     [SerializeField] public List<Chunk> chunkPrefabs;
     [SerializeField] public List<Chunk> FirstChunkPrefabs;
     [SerializeField] public List<GameObject> LoadedChunks; 
     [SerializeField] private float chunkHeight = 50f; // Height of each chunk
-    [SerializeField] private float spawnThresholdDistance = 50f; // Distance the player must move to spawn a new chunk
+    private float spawnThresholdDistance = 30f; // Distance the player must move to spawn a new chunk
 
     [Header("References")]
     [SerializeField] private Transform ball;           // Reference to the ball/player
@@ -33,7 +31,8 @@ public class ChunkManager : MonoBehaviour
 
         float playerY = ball.position.y;
 
-        if (playerY - lastSpawnY  >= spawnThresholdDistance)
+       // if (playerY - lastSpawnY  >= spawnThresholdDistance)
+        if (playerY >= lastChunkBottom- spawnThresholdDistance)
         {
             spawnNextChunk();
             lastSpawnY = playerY;
@@ -65,6 +64,7 @@ public class ChunkManager : MonoBehaviour
 
 
         LoadedChunks.Add(madedChunk);
+        lastChunkBottom = madedChunk.GetComponent<Chunk>().getBottom();
     }
 
     private void DestroyChunk(GameObject chunk)

@@ -41,15 +41,26 @@ namespace Gameplay.player {
         }
         private void Update()
         {
+            if (GameManager.Instance.IsDebugMode)
+            {
+                if (GameManager.Instance.Camera.transform.position.y > transform.position.y)
+                {
+                    IsTriggered = true;
 
+
+
+
+                }
+            }
 
             if (IsLaunched) return;
 
             if (!IsTriggered) return;
-            
-            IsLaunched=true;
-            LaunchMissile();
 
+            IsLaunched = true;
+            LaunchMissile();
+            // to be removed
+         
         }
         public void LaunchMissile()
         {

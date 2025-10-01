@@ -1,6 +1,8 @@
 namespace Core
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using TMPro;
     using UnityEngine;
     using UnityEngine.SceneManagement;
     using UnityEngine.UI;
@@ -10,12 +12,14 @@ namespace Core
         public static GameManager Instance { get; private set; }
 
         [Header("UI References")]
-      
+        public GameObject AttachedPlanet;
+        public bool IsDebugMode;
         [SerializeField] private GameObject powerUpStuff;
         [SerializeField] public AudioSource audioSource;
         public GameObject Ball;
         public GameObject Camera;
         public GameObject TopBar;
+        public TextMeshProUGUI CoinTxt;
 
         private Dictionary<string, string> globalUserMessageDic = new();
         private bool ghostMessagesCollected;
@@ -58,6 +62,8 @@ namespace Core
         public int NextDangerZoneHeight { get => nextDangerZoneHeight; set => nextDangerZoneHeight = value; }
         public bool CheckForDangerZone { get => checkForDangerZone; set => checkForDangerZone = value; }
 
+        public float difficulty;
+
         private void Awake()
         {
            
@@ -91,8 +97,13 @@ namespace Core
 
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
-        }
 
+           
+        }
+        private void Update()
+        {
+            difficulty = (Camera.transform.position.y / 2500) + 0.05f;
+        }
         private void LoadSettings()
         {
             SfxVolume = PlayerPrefs.GetFloat("sfx_volume", 1f);
@@ -122,13 +133,19 @@ namespace Core
         }
         private void HandleGameOver()
         {
-            EndGame(GetCurrentScore()); // Or whatever finalScore source you have
+            EndGame(GetCurrentScore());
+            DataHandler.Instance.SaveTotalCoins(coinNumber);
+            Ball.GetComponent<CircleCollider2D>().enabled = false;
         }
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        private async void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            await Task.Delay(200);
             Ball = GameObject.FindGameObjectWithTag("Ball");
             Camera = GameObject.FindGameObjectWithTag("MainCamera");
             TopBar = GameObject.FindGameObjectWithTag("TopBar");
+            CoinTxt = GameObject.FindGameObjectWithTag("CoinTxt").GetComponent<TextMeshProUGUI>();
+            coinNumber = DataHandler.Instance.GetTotalCoins();
+            CoinTxt.text = coinNumber.ToString();
         }
         public void ResetGame()
         {
@@ -140,26 +157,26 @@ namespace Core
             IsGameOver = false;
             TotalPoints = 0;
             currentScore = 0;
-            coinNumber = 0;
             gameRunning = true;
             isShieldActive = false;
             isLaserActive = false;
             isMagnetActive = false;
 
             EventBus.RaiseScoreChanged(0);
-            EventBus.RaiseCoinCollected(0);
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentSceneIndex);
         }
         //  #region Scores & Currency
-        public void AddCoin(int amount) => coinNumber += amount;
-        public int GetCoinCount() => coinNumber;
-        public void SetBestScore(int score) => bestScore = score;
-        public int GetBestScore() => bestScore;
+        public void AddCoin(int amount)
+        {
+            coinNumber += amount;
+            CoinTxt.text = coinNumber.ToString();
+        }
         public void SetCurrentScore(int score) => currentScore = score;
         public int GetCurrentScore() => currentScore;
 
-       // #region Volumes
+
+        // #region Volumes
         public void SetMusicVolume(float volume) => musicVolume = volume;
         public float GetMusicVolume() => musicVolume;
         public void SetSfxVolume(float volume) => sfxVolume = volume;

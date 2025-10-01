@@ -7,7 +7,7 @@ namespace Gameplay.Player
     public class BallController : MonoBehaviour
     {
         [Header("Movement Settings")]
-        [SerializeField] private float moveSpeed = 20f;       // Linear speed after release
+        [SerializeField] public float moveSpeed = 20f;       // Linear speed after release
         [SerializeField] private float rotationSpeed = 200; // Orbit speed in degrees/sec
         [SerializeField] private float freeBallrotationSpeed = 200; // Orbit speed in degrees/sec
 
@@ -111,14 +111,13 @@ namespace Gameplay.Player
             anchorPlanet = anchor;
             isAnchored = true;
             totalRotation = 0f;
-
+            anchorPlanet.GetComponent<PlanetAttribute>().IsAnchoreToBall = true;
             moveDirection = Vector2.zero;
             rb.linearVelocity = Vector2.zero;
             OnBallAnchoredToPlanet();
             GameManager.Instance.SetBallAttached(true);
             ballAudioHandler.playAttach();
         }
-
         public void DetachFromAnchor()
         {
             if (!anchorPlanet) return;
@@ -126,10 +125,10 @@ namespace Gameplay.Player
             // Launch perpendicular to radius vector
             moveDirection = -tangentDirection;
 
-            anchorPlanet = null;
             isAnchored = false;
             OnBallReleasedFromPlanet();
-
+            anchorPlanet.GetComponent<PlanetAttribute>().IsAnchoreToBall = false;
+            anchorPlanet = null;
             GameManager.Instance.SetBallAttached(false);
             EventBus.RaiseGameStarted();
         }
@@ -140,7 +139,12 @@ namespace Gameplay.Player
                 AttachToAnchor(planetTransform);
 
         }
+        public void GetCoin()
+        {
 
+            GameManager.Instance.AddCoin(1);
+            ballAudioHandler.playCoin();
+        }
         public void RotateInFreeFlight(bool toLeft)
         {
             if (isAnchored || GameManager.Instance.IsGamePaused()) return;

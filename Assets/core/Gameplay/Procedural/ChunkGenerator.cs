@@ -2,21 +2,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core;
 
-/// <summary>
-/// Core chunk generator using PlacableObject system.
-/// Controls planet and hazard placement.
-/// </summary>
 public class ChunkGenerator : MonoBehaviour
 {
     [Header("Difficulty Settings")]
     [Range(0f, 1f)]
-    public float difficulty;
+    private float difficulty;
 
     [Header("Chunk Bounds")]
     public float chunkHeight = 50f;
     public float chunkWidth = 10f;
-    public float safeEdgeMargin = 0.5f;
+    public float cellSize = 1f;
+    public int usableCols = 8;
 
     [Header("Prefabs")]
     public GameObject planetPrefab;
@@ -24,15 +22,22 @@ public class ChunkGenerator : MonoBehaviour
     public GameObject blackHolePrefab;
     public GameObject laserGunPrefab;
     public GameObject alienShipPrefab;
-    public GameObject rocketLauncherPrefab;
+    public GameObject missilePrefab;
     public GameObject beamEmitterPrefab;
 
-    private float leftBound, rightBound;
-    private List<PlacableObject> placedObjects = new List<PlacableObject>();
+    [Header("Difficulty Thresholds")]
+    private float blackHoleThreshold = 0.06f;
+    private float alienShipThreshold = 0.1f;
+    private float beamEmitterThreshold = 0.2f;
+    private float laserGunThreshold = 0.4f;
+    private float rocketLauncherThreshold = 0.5f;
+    private float badPlanetThreshold = 0.7f;
+    private float badPlanetChance = 0.3f;
 
     private void Start()
     {
         GenerateCaller(GetComponent<Chunk>().getTop() - GetComponent<Chunk>().height, transform);
+        difficulty = GameManager.Instance.difficulty;
     }
 
     public async void GenerateCaller(float baseY, Transform parent)
@@ -41,189 +46,238 @@ public class ChunkGenerator : MonoBehaviour
         StartCoroutine(GenerateChunkCoroutine(baseY, parent));
     }
 
-    private IEnumerator GenerateChunkCoroutine(float baseY, Transform parent)
+    public IEnumerator GenerateChunkCoroutine(float baseY, Transform parent)
     {
-        CalculateHorizontalBounds();
-        placedObjects.Clear();
+        Random.InitState(System.Environment.TickCount ^ GetInstanceID());
 
-        yield return StartCoroutine(GeneratePlanetsCoroutine(baseY, parent));
-        yield return StartCoroutine(GenerateHazardsCoroutine(baseY, parent));
-    }
+        float originX = -(usableCols * cellSize) / 2f;
+        Vector2 origin = new Vector2(originX, baseY);
+        var grid = new ChunkGrid(origin, usableCols, Mathf.CeilToInt(chunkHeight / cellSize), cellSize);
 
-    private void CalculateHorizontalBounds()
-    {
-        leftBound = -chunkWidth / 2f + safeEdgeMargin;
-        rightBound = chunkWidth / 2f - safeEdgeMargin;
-    }
+        // Build spawner list based on difficulty
+        var spawners = BuildSpawnerList(grid, parent);
+        Shuffle(spawners);
 
-    // ------------------- PLANET GENERATION -------------------
-    private IEnumerator GeneratePlanetsCoroutine(float baseY, Transform parent)
-    {
-        int planetCount = Mathf.RoundToInt(Mathf.Lerp(7, 4, difficulty));
-        float baseSize = Mathf.Lerp(1.5f, 1f, difficulty);
-        float verticalStep = chunkHeight / planetCount;
-        int maxAttempts = planetCount * 5;
-
-        for (int i = 0, attempts = 0; i < planetCount && attempts < maxAttempts; attempts++)
+        foreach (var spawner in spawners)
         {
-            float yPos = baseY + i * verticalStep + Random.Range(-1f, 1f);
-            float xPos = Random.Range(leftBound, rightBound);
-            Vector2 pos = new Vector2(xPos, yPos);
-
-            if (!IsPositionSafe(pos, 2f)) { continue; } // Planet safe radius
-
-            float size = baseSize * (1f + Random.Range(-0.3f, 0.3f));
-            var planetGO = Instantiate(planetPrefab, pos, Quaternion.identity, parent);
-            planetGO.transform.localScale = Vector3.one * size;
-            placedObjects.Add(new PlanetPlacable(planetGO.transform));
-
-            i++;
-            yield return null;
+            spawner();
+            yield return new WaitForSeconds(0.2f);
         }
-    }
 
-    // ------------------- HAZARD GENERATION -------------------
-    private IEnumerator GenerateHazardsCoroutine(float baseY, Transform parent)
-    {
-        SpawnSpikes(baseY, parent);
-        SpawnBlackHoles(baseY, parent);
-        SpawnBeamEmitters(baseY, parent);
-        SpawnAlienShips(baseY, parent);
-        SpawnLaserGuns(baseY, parent);
-        SpawnRocketLaunchers(baseY, parent);
+        // Spawn laser guns (difficulty-gated)
+        if (difficulty >= laserGunThreshold)
+            SpawnLaserGuns(baseY, parent);
+
+        // Spawn missiles/rockets (difficulty-gated)
+        if (difficulty >= rocketLauncherThreshold)
+            SpawnSpread(grid, missilePrefab, Random.Range(1, 6), 1, 1, parent);
+
         yield return null;
     }
 
-    private void SpawnSpikes(float baseY, Transform parent)
+    /// <summary>
+    /// Builds the list of spawners based on current difficulty level.
+    /// </summary>
+    private List<System.Action> BuildSpawnerList(ChunkGrid grid, Transform parent)
     {
-        int count = Mathf.RoundToInt(Mathf.Lerp(5, 10, difficulty));
-        int maxAttempts = count * 5;
+        var spawners = new List<System.Action>();
 
-        for (int i = 0, attempts = 0; i < count && attempts < maxAttempts; attempts++)
+        // Planets always spawn (but can be bad planets at max difficulty)
+        spawners.Add(() => SpawnPlanetsSpread(grid, parent));
+
+        // Spikes always spawn (basic obstacle)
+        spawners.Add(() => SpawnSpread(grid, spikePrefab,
+            Mathf.RoundToInt(Mathf.Lerp(5, 10, difficulty)), 2, 2, parent));
+
+        // Black holes: difficulty >= 0.1
+        if (difficulty >= blackHoleThreshold)
         {
-            Vector2 pos = GetRandomChunkPos(baseY);
-            if (!IsPositionSafe(pos, 1f)) { continue; }
+            int blackHoleCount = difficulty >= 0.7f ? Random.Range(1, 3) : Random.Range(1, 3);
+            spawners.Add(() => SpawnSpread(grid, blackHolePrefab, blackHoleCount, 5, 5, parent));
+        }
 
-            var spikeGO = Instantiate(spikePrefab, pos, Quaternion.identity, parent);
-            placedObjects.Add(new SpikePlacable(spikeGO.transform));
-            i++;
+        // Alien ships: difficulty >= 0.2
+        if (difficulty >= alienShipThreshold)
+        {
+            spawners.Add(() => SpawnAliensSpread(grid, parent));
+        }
+
+        // Beam emitters: difficulty >= 0.4
+        if (difficulty >= beamEmitterThreshold)
+        {
+            int beamCount = difficulty >= 0.8f ? Random.Range(1, 3) : Random.Range(1, 3);
+            spawners.Add(() => SpawnSpread(grid, beamEmitterPrefab, beamCount, 4, 4, parent));
+        }
+
+        return spawners;
+    }
+
+    private void SpawnPlanetsSpread(ChunkGrid grid, Transform parent)
+    {
+        int planetCount = Mathf.RoundToInt(Mathf.Lerp(8, 5, difficulty));
+        float baseSize = Mathf.Lerp(2f, 1f, difficulty);
+        var placedPositions = new List<Vector2>();
+
+        for (int i = 0; i < planetCount; i++)
+        {
+            float scale = baseSize * (1f + Random.Range(-0.3f, 0.3f));
+            float moveX = Random.Range(0f, 2f);
+            float moveY = Random.Range(0f, 1f);
+
+            var pObj = new PlanetPlacable(Vector2.zero, scale * 2, moveX, moveY);
+            Vector2Int bestCell = FindBestSpreadCell(grid, pObj, placedPositions);
+
+            if (grid.TryPlaceAt(pObj, bestCell, out Vector2 pos))
+            {
+                var planet = Instantiate(planetPrefab, pos, Quaternion.identity, parent);
+                planet.transform.localScale = Vector3.one * scale;
+
+                // Set bad planet at max difficulty
+                SetBadPlanetIfNeeded(planet);
+
+                placedPositions.Add(pos);
+            }
         }
     }
 
-    private void SpawnBlackHoles(float baseY, Transform parent)
+    /// <summary>
+    /// Sets planet as bad planet based on difficulty threshold and random chance.
+    /// </summary>
+    private void SetBadPlanetIfNeeded(GameObject planet)
     {
-        if (difficulty < 0.3f) return;
-        int count = Random.Range(1, difficulty >= 0.7f ? 3 : 2);
-        int maxAttempts = count * 5;
-
-        for (int i = 0, attempts = 0; i < count && attempts < maxAttempts; attempts++)
+        if (difficulty >= badPlanetThreshold && Random.value < badPlanetChance)
         {
-            Vector2 pos = GetRandomChunkPos(baseY);
-            if (!IsPositionSafe(pos, 3f)) { continue; }
-
-            var bhGO = Instantiate(blackHolePrefab, pos, Quaternion.identity, parent);
-            placedObjects.Add(new BlackHolePlacable(bhGO.transform));
-            i++;
+            var planetAttribute = planet.GetComponent<PlanetAttribute>();
+            if (planetAttribute != null)
+            {
+                // Use reflection or a setter method to set the private field
+                SetBadPlanetProperty(planetAttribute, true);
+            }
         }
     }
 
-    private void SpawnBeamEmitters(float baseY, Transform parent)
+    /// <summary>
+    /// Helper method to set isBadPlanet property (you'll need to add a setter to PlanetAttribute).
+    /// </summary>
+    private void SetBadPlanetProperty(PlanetAttribute planetAttribute, bool value)
     {
-        if (difficulty < 0.4f) return;
-        int count = Random.Range(1, difficulty >= 0.8f ? 3 : 2);
-        int maxAttempts = count * 5;
+        // Method 1: If you add a public setter to PlanetAttribute
+        // planetAttribute.SetBadPlanet(value);
 
-        for (int i = 0, attempts = 0; i < count && attempts < maxAttempts; attempts++)
+        // Method 2: Using reflection (temporary solution)
+        var field = typeof(PlanetAttribute).GetField("isBadPlanet",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (field != null)
         {
-            Vector2 pos = GetRandomChunkPos(baseY);
-            if (!IsPositionSafe(pos, 2.5f)) { continue; }
-
-            var beamGO = Instantiate(beamEmitterPrefab, pos, Quaternion.identity, parent);
-            placedObjects.Add(new BeamEmitterPlacable(beamGO.transform));
-            i++;
+            field.SetValue(planetAttribute, value);
         }
     }
 
-    private void SpawnAlienShips(float baseY, Transform parent)
+    private void SpawnAliensSpread(ChunkGrid grid, Transform parent)
     {
-        if (difficulty < 0.7f) return;
-        int count = Random.Range(1, 4);
-        int maxAttempts = count * 5;
+        int alienCount = Random.Range(1, 4);
+        var placedPositions = new List<Vector2>();
 
-        for (int i = 0, attempts = 0; i < count && attempts < maxAttempts; attempts++)
+        for (int i = 0; i < alienCount; i++)
         {
-            Vector2 pos = GetRandomChunkPos(baseY);
-            if (!IsPositionSafe(pos, 2f)) { continue; }
+            var aObj = new AlienShipPlacable(Vector2.zero, 2, 1,
+                Random.Range(1f, 3f), Random.Range(0f, 2f));
+            Vector2Int bestCell = FindBestSpreadCell(grid, aObj, placedPositions);
 
-            var alienGO = Instantiate(alienShipPrefab, pos, Quaternion.identity, parent);
-            placedObjects.Add(new AlienShipPlacable(alienGO.transform));
-            i++;
+            if (grid.TryPlaceAt(aObj, bestCell, out Vector2 pos))
+            {
+                Instantiate(alienShipPrefab, pos, Quaternion.identity, parent);
+                placedPositions.Add(pos);
+            }
         }
+    }
+
+    private void SpawnSpread(ChunkGrid grid, GameObject prefab, int count, int hSpan, int vSpan,
+        Transform parent, Vector2Int? clampRangeX = null)
+    {
+        if (count <= 0) return;
+        var placedPositions = new List<Vector2>();
+
+        for (int i = 0; i < count; i++)
+        {
+            var sObj = new StaticPlacable(Vector2.zero, hSpan, vSpan);
+            Vector2Int bestCell = FindBestSpreadCell(grid, sObj, placedPositions, clampRangeX);
+
+            if (grid.TryPlaceAt(sObj, bestCell, out Vector2 pos, clampRangeX))
+            {
+                Instantiate(prefab, pos, Quaternion.identity, parent);
+                placedPositions.Add(pos);
+            }
+        }
+    }
+
+    private Vector2Int FindBestSpreadCell(ChunkGrid grid, PlacableObject obj,
+        List<Vector2> existingPositions, Vector2Int? rangeClampX = null)
+    {
+        var candidateCells = new List<Vector2Int>(grid.AvailableCells);
+        ChunkGrid.ShuffleUtil.ShuffleInPlace(candidateCells);
+
+        // First placement: pick one valid cell at random
+        if (existingPositions.Count == 0)
+        {
+            var validCells = new List<Vector2Int>();
+            foreach (var cell in candidateCells)
+                if (grid.CanPlaceAt(obj, cell, rangeClampX))
+                    validCells.Add(cell);
+
+            if (validCells.Count > 0)
+                return validCells[Random.Range(0, validCells.Count)];
+
+            return Vector2Int.zero;
+        }
+
+        // Subsequent placements: keep spread heuristic
+        float bestScore = -1f;
+        Vector2Int bestCell = Vector2Int.zero;
+
+        foreach (var cell in candidateCells)
+        {
+            if (!grid.CanPlaceAt(obj, cell, rangeClampX))
+                continue;
+
+            Vector2 worldPos = grid.CellToWorld(cell);
+            float minDist = float.MaxValue;
+            foreach (var placed in existingPositions)
+                minDist = Mathf.Min(minDist, Vector2.Distance(worldPos, placed));
+
+            float adjustedScore = minDist + Random.Range(0f, 0.5f);
+            if (adjustedScore > bestScore)
+            {
+                bestScore = adjustedScore;
+                bestCell = cell;
+            }
+        }
+        return bestCell;
     }
 
     private void SpawnLaserGuns(float baseY, Transform parent)
     {
-        if (difficulty < 0.5f) return;
         int count = Random.Range(1, 3);
-        int maxAttempts = count * 5;
-
-        for (int i = 0, attempts = 0; i < count && attempts < maxAttempts; attempts++)
+        for (int i = 0; i < count; i++)
         {
-            float yPos = baseY + Random.Range(0, chunkHeight);
+            float yPos = baseY + Random.Range(0f, chunkHeight);
             bool isLeft = Random.value < 0.5f;
-            float xPos = isLeft ? -5f : 5f;
+            float xPos = isLeft ? -chunkWidth / 2f : chunkWidth / 2f;
             Vector2 pos = new Vector2(xPos, yPos);
 
-            if (!IsPositionSafe(pos, 1.5f)) { continue; }
-
-            var laserGO = Instantiate(laserGunPrefab, pos, Quaternion.identity, parent);
-            var gunScript = laserGO.GetComponent<LaserGunHandler>();
-            if (gunScript != null)
-                gunScript.isLeftGun = isLeft;
-
-            placedObjects.Add(new LaserGunPlacable(laserGO.transform));
-            i++;
+            var laserGun = Instantiate(laserGunPrefab, pos, Quaternion.identity, parent);
+            var gunScript = laserGun.GetComponent<LaserGunHandler>();
+            if (gunScript != null) gunScript.isLeftGun = isLeft;
         }
     }
 
-    private void SpawnRocketLaunchers(float baseY, Transform parent)
+    private void Shuffle<T>(IList<T> list)
     {
-        if (difficulty < 0.8f) return;
-        int count = Random.Range(1, 6);
-        int maxAttempts = count * 5;
-
-        for (int i = 0, attempts = 0; i < count && attempts < maxAttempts; attempts++)
+        int n = list.Count;
+        for (int i = 0; i < n; i++)
         {
-            Vector2 pos = GetRandomChunkPos(baseY);
-            if (!IsPositionSafe(pos, 2f)) { continue; }
-
-            var rocketGO = Instantiate(rocketLauncherPrefab, pos, Quaternion.identity, parent);
-            placedObjects.Add(new RocketLauncherPlacable(rocketGO.transform));
-            i++;
+            int r = Random.Range(i, n);
+            (list[i], list[r]) = (list[r], list[i]);
         }
-    }
-
-    // ------------------- HELPER METHODS -------------------
-    private Vector2 GetRandomChunkPos(float baseY)
-    {
-        float xPos = Random.Range(leftBound, rightBound);
-        float yPos = baseY + Random.Range(0f, chunkHeight);
-        return new Vector2(xPos, yPos);
-    }
-
-    private bool IsPositionSafe(Vector2 pos, float safeRadius)
-    {
-        var temp = new TempPlacable(pos, safeRadius);
-        return temp.InSafeRadius(pos, placedObjects);
-    }
-
-    private class TempPlacable : PlacableObject
-    {
-        private Vector2 position;
-        public TempPlacable(Vector2 pos, float sr) : base(sr, 0, 0)
-        {
-            position = pos;
-        }
-        public override Vector2 GetPosition() => position;
     }
 }

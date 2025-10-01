@@ -1,3 +1,4 @@
+using Core;
 using Gameplay.Interfaces;
 using Gameplay.Player;
 using TMPro;
@@ -17,7 +18,7 @@ public class PlanetAnchor : MonoBehaviour, IHitBall
     }
     public void OnHitBall(BallController ball)
     {
-        Debug.Log("weeeeeeeeee");
+        GameManager.Instance.AttachedPlanet = transform.gameObject;
         ball.AnchorTo(transform);
         ball.SetOrbitRadius(GetComponent<PlanetAttribute>().orbitRadius);
         GetComponent<PlanetAttribute>().ActivateOrbitVisual();
