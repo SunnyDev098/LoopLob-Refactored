@@ -1,5 +1,6 @@
 namespace Core
 {
+    using Environment;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using TMPro;
@@ -11,9 +12,13 @@ namespace Core
     {
         public static GameManager Instance { get; private set; }
 
+        [Header("Config References")]
+        public ProceduralSettings proceduralSettings;
+
         [Header("UI References")]
         public GameObject AttachedPlanet;
         public bool IsDebugMode;
+
         [SerializeField] private GameObject powerUpStuff;
         [SerializeField] public AudioSource audioSource;
         public GameObject Ball;

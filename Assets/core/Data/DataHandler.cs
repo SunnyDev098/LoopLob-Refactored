@@ -30,6 +30,7 @@ public class DataHandler : MonoBehaviour
     private void Start()
     {
         DataInitiator();
+        Application.targetFrameRate = 60;
     }
 
     private void DataInitiator()

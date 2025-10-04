@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using Firebase;
 using Firebase.Auth;
-using Firebase.Messaging;
 using Firebase.Firestore;
 using System;
 using System.Threading.Tasks;
-
+//using Firebase.Messaging;
 #if UNITY_ANDROID
 using UnityEngine.Android;
 #endif
@@ -79,8 +78,9 @@ public class FireBaseStarter : MonoBehaviour
                 // -------- AUTH INIT --------
                 auth = FirebaseAuth.DefaultInstance;
                 await SignInAnonymously();
-
+               
                 // -------- MESSAGING INIT --------
+                /*
                 FirebaseMessaging.MessageReceived += OnMessageReceived;
                 FirebaseMessaging.TokenReceived += OnTokenReceived;
 
@@ -92,6 +92,8 @@ public class FireBaseStarter : MonoBehaviour
                 await UpdateTokenInFirestoreIfUserExists(CurrentFcmToken);
 
                 Debug.Log("Firebase Messaging listeners set.");
+                */
+               
             }
             else
             {
@@ -139,7 +141,7 @@ public class FireBaseStarter : MonoBehaviour
             Debug.LogError("Anonymous sign-in failed: user is null.");
         }
     }
-
+    /*
     private void OnMessageReceived(object sender, MessageReceivedEventArgs e)
     {
         var notification = e.Message.Notification;
@@ -156,7 +158,7 @@ public class FireBaseStarter : MonoBehaviour
         // Auto-update Firestore if a username exists
         await UpdateTokenInFirestoreIfUserExists(CurrentFcmToken);
     }
-
+   */
     private async Task UpdateTokenInFirestoreIfUserExists(string token)
     {
         if (!string.IsNullOrEmpty(token) && PlayerPrefs.HasKey("username"))
@@ -176,7 +178,7 @@ public class FireBaseStarter : MonoBehaviour
             }
         }
     }
-
+     
 #if UNITY_ANDROID
     private int GetAndroidSDKInt()
     {

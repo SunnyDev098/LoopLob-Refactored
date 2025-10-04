@@ -6,18 +6,22 @@ public class MainMenuHandler : MonoBehaviour
     public Button PlayButton;
     public Button OptionsButton;
     public Button ScoreboardButton;
+    public Button Tutorial;
 
     public GameObject mainMenuPanel;
     public GameObject optionsPanel;
     public GameObject scoreboardPanel;
+    public GameObject TutorialPanel;
 
     public GameObject sceneDecoration;
+
 
     private void Awake()
     {
         if (PlayButton != null) PlayButton.onClick.AddListener(OnPlayClicked);
         if (OptionsButton != null) OptionsButton.onClick.AddListener(OnOptionClicked);
         if (ScoreboardButton != null) ScoreboardButton.onClick.AddListener(OnOptionClicked);
+        if (Tutorial != null) Tutorial.onClick.AddListener(ShowTutorial);
 
 
     }
@@ -27,6 +31,7 @@ public class MainMenuHandler : MonoBehaviour
         if (PlayButton != null) PlayButton.onClick.RemoveListener(OnPlayClicked);
         if (OptionsButton != null) OptionsButton.onClick.RemoveListener(OnOptionClicked);
         if (ScoreboardButton != null) ScoreboardButton.onClick.RemoveListener(OnScoreboardClicked);
+        if (Tutorial != null) Tutorial.onClick.RemoveListener(ShowTutorial);
         
     }
 
@@ -55,6 +60,7 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void ShowOptions()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "OptionsPanel");
     public void ShowScoreboard()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "ScoreBoardPanel");
+    public void ShowTutorial()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "TutorialPanel");
 
 
  

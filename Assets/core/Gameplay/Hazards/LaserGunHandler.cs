@@ -24,21 +24,25 @@ public class LaserGunHandler : MonoBehaviour
     private bool isRotating = false;
     private float targetAngle;
 
-    private void Awake()
-    {
-
-        yRotationBase = isLeftGun ? 0 : 180;
-    }
 
     private async void Start()
     {
+        await Task.Delay(200);
+
+        isLeftGun = Random.value < 0.5f;
+
+        Vector3 pos = transform.position;
+        pos.x = isLeftGun ? -5f : 5f;
+        transform.position = pos;
+
+        yRotationBase = isLeftGun ? 0 : 180;
+
         StartCoroutine(RotateAndShootRoutine());
 
-        await Task.Delay(200);
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (isLeftGun && sr != null)
         {
-            sr.flipX = true;
+          //  sr.flipX = true;
         }
 
     }

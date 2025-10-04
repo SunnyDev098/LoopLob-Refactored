@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 732573bbdeb3179488b1827bd6cc63b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  difficulty: 1
+  proceduralSettings: {fileID: 11400000, guid: 0d00b4557571ef24090125328603ee42, type: 2}
   chunkHeight: 50
   chunkWidth: 10
   cellSize: 1

@@ -12,110 +12,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49d148fe355274842812e6a6639fdb9c, type: 3}
   m_Name: ProceduralSettings
   m_EditorClassIdentifier: 
-  spriteCarrier: {fileID: 0}
-  planetPrefab: {fileID: 6555924651408547538, guid: 67786bab41322624db12dc21f44d781d, type: 3}
-  triangleSpikePrefab: {fileID: 0}
+  planetPrefab: {fileID: 6555924651408547538, guid: 71b7322ee368a9547abc2e5f543b776a, type: 3}
+  spikePrefab: {fileID: 5500117242909943883, guid: 97b649a2f1ca1564587ccf707ac9fcb7, type: 3}
+  blackHolePrefab: {fileID: 6621120231972223764, guid: d218994ec09402541a65db9884a2f1f8, type: 3}
+  alienShipPrefab: {fileID: 6153084849508170010, guid: 202385ae6d5352c49b9d338770a35d65, type: 3}
+  beamEmitterPrefab: {fileID: 1755857207460168140, guid: 1d4fe635448c8fa4c974c8d4496b5831, type: 3}
   laserGunPrefab: {fileID: 980303768243886007, guid: 7717afbe547dea4449825351d177c619, type: 3}
-  distanceBannerPrefab: {fileID: 6597243415142027872, guid: f5b4e872af2dcbc4ba8f17940d0e1da6, type: 3}
-  badPlanetPrefab: {fileID: 0}
-  blackHolePrefab: {fileID: 0}
-  spikePrefab: {fileID: 0}
-  magnetPrefab: {fileID: 0}
-  batteryPrefab: {fileID: 0}
-  shieldPrefab: {fileID: 0}
-  blueZonePrefab: {fileID: 0}
-  redZonePrefab: {fileID: 0}
-  coinPrefab: {fileID: 0}
-  horizontalMargin: 0.95
-  minPlanetDistance: 4
-  maxPlanetDistance: 7
-  initialPlanetSize: 2.5
-  minPlanetSize: 1
-  bigPlanetChance: 0.15
-  bigPlanetSizeMultiplier: 2
-  planetSizeVariance: 0.3
-  minEdgeDistance: 1.5
-  sizeReductionCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.010559082
-      value: 0.18209839
-      inSlope: 0.5415553
-      outSlope: 0.5415553
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.99243164
-      value: 0.71383667
-      inSlope: 0.5415553
-      outSlope: 0.5415553
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  distanceIncreaseCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0.004512787
-      value: 0.2394104
-      inSlope: 0.4754625
-      outSlope: 0.4754625
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.99365234
-      value: 0.70970917
-      inSlope: 0.4754625
-      outSlope: 0.4754625
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  stageHeight: 200
-  triggerOffset: 20
-  twinGateStartHeight: 1000
-  twinGateSpawnInterval: {x: 200, y: 300}
-  safeStartHeight: 50
-  blackHoleStartHeight: 150
-  spikeStartHeight: 100
-  badPlanetStartHeight: 200
-  minSpecialObjectDistance: 15
-  maxPlanetDensity: 0.3
-  maxSpikeDensity: 0.4
+  missilePrefab: {fileID: 4321580585380483403, guid: 5158331f58046694d873b44acec89c21, type: 3}
+  badPlanetPrefab: {fileID: 6555924651408547538, guid: 71b7322ee368a9547abc2e5f543b776a, type: 3}
+  spikeThreshold: 0.05
+  blackHoleThreshold: 0.06
+  alienShipThreshold: 0.1
+  beamEmitterThreshold: 0.2
+  laserGunThreshold: 0
+  rocketLauncherThreshold: 0.5
+  badPlanetThreshold: 0.7
+  badPlanetChance: 0.3
+  spikeCountRange: {x: 5, y: 10}
+  blackHoleCountRange: {x: 1, y: 3}
+  beamEmitterCountRange: {x: 1, y: 3}
+  planetCountRange: {x: 5, y: 8}
+  alienCountRange: {x: 1, y: 4}
+  missileCountRange: {x: 0, y: 2}
+  laserGunCountRange: {x: 1, y: 3}
+  laserGunHSpan: 3
+  laserGunVSpan: 3
+  laserGunSafeEdgeMargin: 0.5
+  spikeHSpan: 2
+  spikeVSpan: 2
+  blackHoleHSpan: 5
+  blackHoleVSpan: 5
+  beamEmitterHSpan: 4
+  beamEmitterVSpan: 4
   minObjectSpacing: 2.5
-  spikeProbability: 0.4
-  blackHoleProbability: 0.2
-  badPlanetProbability: 0.2
-  powerupsPerStage: 3
-  zoneStartHeight: 200
-  zoneSpawnChance: 0.5
-  minVerticalZoneDistance: 10
-  minHorizontalZoneDistance: 5
-  zonePlacementAttempts: 5
-  maxZonesPerStage: 2
-  zoneSizeVariance: 0.3
-  minZoneSize: 1.5
-  maxZoneSize: 3
-  coinTrailChance: 0.5
-  coinSpacing: 1
-  minCurveHeight: 1
-  maxCurveHeight: 3
-  obstacleAvoidOffset: 2
-  allowCurvedTrails: 1
-  planetSafeOffset: 1.5
-  freeCoinPathChance: 0.3
-  distanceBannerInterval: 500
-  fadeDuration: 3
-  twinGatePrefab: {fileID: 6160786418203971013, guid: 7c28a54f93d6dd943ae474394856df57, type: 3}
+  hazardSafeEdgeMargin: 0.5
+  minPlanetSize: 1
+  maxPlanetSize: 2
+  planetSizeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 2
+      inSlope: 0
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

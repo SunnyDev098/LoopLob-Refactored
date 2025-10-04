@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Core;
 using Gameplay.player;
+using UnityEngine.UIElements;
 
 namespace Gameplay.Player
 {
@@ -94,12 +95,14 @@ namespace Gameplay.Player
             if (pos.x >= bounceXLimit )
             {
                 moveDirection.x = -moveDirection.x;
+                transform.position += new Vector3(-0.25f, moveDirection.y*0.1f, 0);
                 ballAudioHandler.playBounce();
 
             }
             else if (pos.x <= -bounceXLimit)
             {
                 moveDirection.x = -moveDirection.x;
+                transform.position += new Vector3(0.25f, moveDirection.y * 0.1f, 0);
                 ballAudioHandler.playBounce();
 
             }

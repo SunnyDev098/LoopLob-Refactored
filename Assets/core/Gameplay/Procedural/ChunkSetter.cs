@@ -14,7 +14,6 @@ public class ChunkSetter : MonoBehaviour
         }
 
         Vector3 scale = transform.localScale;
-        scale.y = config.stageHeight;  // or whatever field you want from config
         transform.localScale = scale;
     }
 }
