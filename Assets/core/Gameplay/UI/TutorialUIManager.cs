@@ -19,6 +19,9 @@ public class TutorialUIManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip pageFlip;
 
+
+
+    public GameObject SceneDecoration;
     private int currentPage = 0;
 
     private void Awake()
@@ -29,10 +32,14 @@ public class TutorialUIManager : MonoBehaviour
         if (backButton) backButton.onClick.AddListener(OnBackClicked);
 
         ShowPage(0); 
-        MusicPlayer.StopMusic();
+
+       // MusicPlayer.StopMusic();
 
     }
-
+    private void Start()
+    {
+        SceneDecoration.SetActive(false);
+    }
     private void ShowPage(int pageIndex)
     {
         // Bounds safety
@@ -78,6 +85,9 @@ public class TutorialUIManager : MonoBehaviour
     private void OnMainMenuClick()
     {
         mainMenuHandler.ShowMainMenu();
+        SceneDecoration.SetActive(true);
+
+
         MusicPlayer.ResumeMusic();
     }
 

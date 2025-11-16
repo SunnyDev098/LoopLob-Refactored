@@ -80,7 +80,7 @@ public class PlanetAttribute : MonoBehaviour
         orbitRadius = (transform.localScale.x * 1.5f) / 2f;
     }
 
-    private void HideOrbitVisual()
+    public void HideOrbitVisual()
     {
         if (activatedOrbit != null)
             activatedOrbit.SetActive(false);

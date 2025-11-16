@@ -12,7 +12,6 @@ public class UsernameClaim : MonoBehaviour
     public GameObject mainMenuPanel;
 
     private const string COLLECTION_USERNAMES = "usernames";
-    private const string PREF_USERNAME = "username";
 
     private FirebaseAuth auth;
     private FirebaseFirestore firestore;
@@ -49,6 +48,7 @@ public class UsernameClaim : MonoBehaviour
 
         return true;
     }
+
 
     private async Task<bool> EnsureSignedIn()
     {
@@ -103,12 +103,12 @@ public class UsernameClaim : MonoBehaviour
             Debug.LogError("[Firestore] Save failed: " + ex);
             return false;
         }
+
     }
 
     private void SaveLocally(string username)
     {
-        PlayerPrefs.SetString(PREF_USERNAME, username);
-        PlayerPrefs.Save();
+        DataHandler.Instance.SetUserName(username);
     }
 
     private void ShowSuccess()

@@ -1,3 +1,4 @@
+﻿using Core;
 using Gameplay.player;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Gameplay.Player
         private SpritePulseController spritePulseController;
         private BallAudioHandler ballAudioHandler;
 
+        public GameObject powerUpsPanel;
 
         private void Awake()
         {
@@ -20,12 +22,23 @@ namespace Gameplay.Player
 
         private void Update()
         {
-            HandleRotationInput();
-            HandleDetachInput();
+
+            if (controller.IsAnchored) 
+            {
+                HandleDetachInput();
+
+            }
+            else
+            {
+                HandleRotationInput();
+
+            }
+
         }
 
         private void HandleRotationInput()
         {
+
             bool leftKey = Input.GetKeyDown(KeyCode.LeftArrow);
             bool rightKey = Input.GetKeyDown(KeyCode.RightArrow);
             bool leftClick = Input.GetMouseButtonDown(0) && Input.mousePosition.x < Screen.width / 2f;
@@ -34,7 +47,11 @@ namespace Gameplay.Player
             if (leftKey || leftClick)
             {
                 controller.RotateInFreeFlight(true);
+
+
+
                 spritePulseController.PlayPulse(0);
+
                 ballAudioHandler.playRotation();
 
             }
@@ -44,6 +61,7 @@ namespace Gameplay.Player
             {
                 controller.RotateInFreeFlight(false);
                 spritePulseController.PlayPulse(1);
+
                 ballAudioHandler.playRotation();
 
             }
@@ -53,8 +71,41 @@ namespace Gameplay.Player
 
         private void HandleDetachInput()
         {
-            if (Input.GetMouseButtonDown(0) && controller.IsAnchored)
-                controller.DetachFromAnchor();
+
+
+            if (GameManager.Instance.gameStarted)
+            {
+                if (Input.GetMouseButtonDown(0) && controller.IsAnchored)
+                {
+
+                    controller.DetachFromAnchor();
+
+                    ballAudioHandler.playRotation();
+
+                }
+
+
+             
+
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0) )
+                {
+                    float y = Input.mousePosition.y;
+                    float h = Screen.height;
+                    if (y >= 0.2f * h && y <= h)
+                    {
+                        controller.DetachFromAnchor();
+                        GameManager.Instance.gameStarted = true;
+                        powerUpsPanel.SetActive(false);
+
+
+                    }
+                }
+
+            }
+
         }
 
        

@@ -29,7 +29,7 @@ namespace Gameplay.Player
         [SerializeField] private AuraHandler auraHandler;
         [SerializeField] private BallAudioHandler ballAudioHandler;
 
-        
+        public float lastAnchorTime;
         private void Reset()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -40,11 +40,13 @@ namespace Gameplay.Player
             orbitRadius = 1;
 
             isAnchored = true;
+
+            lastAnchorTime = Time.time;
         }
 
         private void Update()
         {
-            if(GameManager.Instance.IsGameOver) return;
+            if (GameManager.Instance.IsGamePaused()) return;
             if (!isAnchored)
             {
                 // Transform-based free flight movement
@@ -64,6 +66,7 @@ namespace Gameplay.Player
         private void RotateAroundAnchor()
         {
             if (!anchorPlanet) return;
+            if (GameManager.Instance.IsGamePaused()) return;
 
             float rotationAmount = rotationSpeed * Time.fixedDeltaTime;
 
@@ -120,18 +123,24 @@ namespace Gameplay.Player
             OnBallAnchoredToPlanet();
             GameManager.Instance.SetBallAttached(true);
             ballAudioHandler.playAttach();
+            lastAnchorTime = Time.time;
         }
         public void DetachFromAnchor()
         {
             if (!anchorPlanet) return;
 
+
+            if (lastAnchorTime + 0.1f > Time.time) return;
             // Launch perpendicular to radius vector
             moveDirection = -tangentDirection;
 
             isAnchored = false;
             OnBallReleasedFromPlanet();
             anchorPlanet.GetComponent<PlanetAttribute>().IsAnchoreToBall = false;
+            anchorPlanet.GetComponent<PlanetAttribute>().HideOrbitVisual();
             anchorPlanet = null;
+
+
             GameManager.Instance.SetBallAttached(false);
             EventBus.RaiseGameStarted();
         }

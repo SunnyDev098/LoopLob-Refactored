@@ -59,8 +59,15 @@ namespace Gameplay.Player
         {
 
 
-            StartCoroutine(CycleSpritesCoroutine());
+            if (GameManager.Instance.isShieldActive)
+            {
+                GameManager.Instance.DeActiveSheildCall();
+            }
+            else
+            {
+                EventBus.RaiseGameOver();
 
+            }
         }
 
         private void UpdateMovement()

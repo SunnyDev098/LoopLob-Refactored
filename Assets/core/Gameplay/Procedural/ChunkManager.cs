@@ -58,7 +58,7 @@ public class ChunkManager : MonoBehaviour
 
     private void SpawnChunk(Chunk prefab)
     {
-        Debug.Log("someChunk Just Maded!");
+      //  Debug.Log("someChunk Just Maded!");
         GameObject madedChunk = Instantiate(prefab.gameObject, nextSpawnPosition, Quaternion.identity, chunksParent);
         nextSpawnPosition.y += chunkHeight;
 

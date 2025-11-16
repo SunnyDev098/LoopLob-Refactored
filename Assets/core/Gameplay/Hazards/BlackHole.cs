@@ -29,12 +29,49 @@ public class BlackHole : MonoBehaviour, IAttractor
     private AudioSource audioSource;
     private float enterTime;
 
+
+
+
+
+
+
+    // rotation and alpha params
+
+    [Header("Rotation Settings")]
+    [SerializeField] private float rotationSpeed = 90f; // Degrees per second
+
+    [Header("Alpha Fade Settings")]
+    [SerializeField, Range(0f, 1f)] private float minAlpha = 0.3f;
+    [SerializeField, Range(0f, 1f)] private float maxAlpha = 1f;
+    [SerializeField] private float fadeTime = 2f; // Time for full fade cycle
+
+    private SpriteRenderer spriteRenderer;
+    private Color baseColor;
+    private float fadeTimer;
+
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        baseColor = spriteRenderer.color;
     }
 
-    
+    private void Update()
+    {
+        transform.Rotate(0f, 0f, rotationSpeed * Time.deltaTime);
+
+        // --- Alpha Oscillation ---
+        fadeTimer += Time.deltaTime;
+        float t = Mathf.PingPong(fadeTimer / fadeTime, 1f);
+        float newAlpha = Mathf.Lerp(minAlpha, maxAlpha, t);
+
+        // Apply alpha directly without creating new Color instances each frame
+        baseColor.a = newAlpha;
+        spriteRenderer.color = baseColor;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {

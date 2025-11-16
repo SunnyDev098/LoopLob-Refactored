@@ -145,6 +145,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1494297573563153972}
     m_Modifications:
+    - target: {fileID: 726925058088196515, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6178ca90526769445a67836b2ded23a6, type: 3}
     - target: {fileID: 4215500774038848300, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.66
@@ -207,6 +211,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1494297573563153972}
     m_Modifications:
+    - target: {fileID: 726925058088196515, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6178ca90526769445a67836b2ded23a6, type: 3}
     - target: {fileID: 4215500774038848300, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.7
@@ -269,6 +277,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1494297573563153972}
     m_Modifications:
+    - target: {fileID: 726925058088196515, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6178ca90526769445a67836b2ded23a6, type: 3}
     - target: {fileID: 4215500774038848300, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.96
@@ -331,6 +343,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1494297573563153972}
     m_Modifications:
+    - target: {fileID: 726925058088196515, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 6178ca90526769445a67836b2ded23a6, type: 3}
     - target: {fileID: 4215500774038848300, guid: a82290f96be8c5446b7a6f6e6aee0882, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3

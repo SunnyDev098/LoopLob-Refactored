@@ -20,7 +20,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         if (PlayButton != null) PlayButton.onClick.AddListener(OnPlayClicked);
         if (OptionsButton != null) OptionsButton.onClick.AddListener(OnOptionClicked);
-        if (ScoreboardButton != null) ScoreboardButton.onClick.AddListener(OnOptionClicked);
+        if (ScoreboardButton != null) ScoreboardButton.onClick.AddListener(OnScoreboardClicked);
         if (Tutorial != null) Tutorial.onClick.AddListener(ShowTutorial);
 
 

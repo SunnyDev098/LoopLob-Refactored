@@ -9,11 +9,24 @@ namespace Environment
         public GameObject planetPrefab;
         public GameObject spikePrefab;
         public GameObject blackHolePrefab;
-        public GameObject alienShipPrefab;
+        public GameObject alienShipPrefab1;
+        public GameObject alienShipPrefab2;
         public GameObject beamEmitterPrefab;
         public GameObject laserGunPrefab;
         public GameObject missilePrefab;
         public GameObject badPlanetPrefab;
+        public GameObject coinPrefab;
+
+
+        [Header("Coin Trails")]
+        public Vector2Int coinTrailCountRange = new Vector2Int(1, 3); // trails per chunk
+        public float coinSpacing = 1f; // distance between coins
+        public float coinTrailCurveChance = 0.4f; // probability of curve
+        public int coinTrailMinLength = 4; // min cells in a trail
+        public int coinTrailMaxLength = 8; // max cells in a trail
+        public int coinTrailCurveHoldMin = 3; // number of coins before curve can change
+        public float coinTrailCurveExitChance = 0.25f; // chance to leave curve after hold
+
 
         [Header("Difficulty Thresholds (0–1)")]
         [Range(0f, 1f)] public float spikeThreshold = 0.0f; // spikes spawn after this difficulty

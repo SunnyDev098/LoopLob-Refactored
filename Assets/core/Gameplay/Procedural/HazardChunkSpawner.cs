@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Environment;
@@ -36,7 +36,7 @@ public static class HazardChunkSpawner
         }
 
         // Alien Ships
-        if (settings.alienShipPrefab != null && difficulty >= settings.alienShipThreshold)
+        if (settings.alienShipPrefab1 != null && difficulty >= settings.alienShipThreshold)
         {
             spawners.Add(() => SpawnAliensSpread(grid, parent, difficulty, settings));
         }
@@ -67,6 +67,11 @@ public static class HazardChunkSpawner
             int missileCount = UnityEngine.Random.Range(settings.missileCountRange.x, settings.missileCountRange.y);
             spawners.Add(() => SpawnSpread(grid, settings.missilePrefab, missileCount,
                 1, 1, parent));
+        }
+
+        if (settings.coinPrefab != null)
+        {
+            spawners.Add(() => SpawnCoinTrailsSpread(grid, parent, difficulty, settings));
         }
 
         return spawners;
@@ -120,7 +125,9 @@ public static class HazardChunkSpawner
 
             if (grid.TryPlaceAt(aObj, bestCell, out Vector2 pos))
             {
-                UnityEngine.Object.Instantiate(s.alienShipPrefab, pos, Quaternion.identity, parent);
+                var prefab = UnityEngine.Random.value < 0.7f ? s.alienShipPrefab1 : s.alienShipPrefab2;
+                UnityEngine.Object.Instantiate(prefab, pos, Quaternion.identity, parent);
+
                 placedPositions.Add(pos);
             }
         }
@@ -184,4 +191,120 @@ public static class HazardChunkSpawner
         }
         return bestCell;
     }
+
+
+
+
+    private static void SpawnCoinTrailsSpread(ChunkGrid grid, Transform parent, float difficulty, ProceduralSettings s)
+    {
+        int trailCount = UnityEngine.Random.Range(s.coinTrailCountRange.x, s.coinTrailCountRange.y + 1);
+
+        for (int t = 0; t < trailCount; t++)
+        {
+            // Select a random empty starting cell
+            var candidateCells = new List<Vector2Int>(grid.AvailableCells);
+            ChunkGrid.ShuffleUtil.ShuffleInPlace(candidateCells);
+
+            Vector2Int startCell = candidateCells.Find(c => true); // first empty cell
+
+            if (startCell == Vector2Int.zero)
+                continue;
+
+            // Generate path cells
+            List<Vector2Int> pathCells = GenerateTrailPath(grid, startCell, s);
+
+            if (pathCells.Count == 0)
+                continue;
+
+            // Mark cells as occupied by this trail (so no other hazards spawn there)
+            foreach (var cell in pathCells)
+            {
+                Vector2 worldPos = grid.CellToWorld(cell);
+                GameObject coin = UnityEngine.Object.Instantiate(s.coinPrefab, worldPos, Quaternion.identity, parent);
+            }
+        }
+    }
+
+    private static List<Vector2Int> GenerateTrailPath(ChunkGrid grid, Vector2Int startCell, ProceduralSettings s)
+    {
+        List<Vector2Int> path = new List<Vector2Int>();
+        Vector2 current = startCell;
+        path.Add(startCell);
+
+        int targetLength = UnityEngine.Random.Range(s.coinTrailMinLength, s.coinTrailMaxLength + 1);
+        float halfStep = 0.5f;
+        float noSpawnRadius = 0.8f * grid.CellSize;
+
+        int curveState = 0;
+        int curveHold = 0;
+        int curveHoldMin = s.coinTrailCurveHoldMin;
+
+        for (int i = 1; i < targetLength; i++)
+        {
+            if (curveState == 0)
+            {
+                curveState = UnityEngine.Random.Range(-1, 2);
+                curveHold = 0;
+            }
+            else
+            {
+                curveHold++;
+                if (curveHold >= curveHoldMin && UnityEngine.Random.value < s.coinTrailCurveExitChance)
+                {
+                    curveState = 0;
+                    curveHold = 0;
+                }
+            }
+
+            List<Vector2> directions = new List<Vector2>
+        {
+            new Vector2(curveState * halfStep, halfStep),
+            new Vector2(curveState * 1f, 1f),
+            new Vector2(0, 1f),
+            new Vector2(0, halfStep)
+        };
+
+            bool placedNext = false;
+            int lastY = path[path.Count - 1].y;
+
+            foreach (var dir in directions)
+            {
+                Vector2 nextPos = current + dir;
+                Vector2Int checkCell = new Vector2Int(Mathf.FloorToInt(nextPos.x), Mathf.FloorToInt(nextPos.y));
+
+                if (checkCell.y <= lastY) continue;
+                if (!grid.CanPlaceAt(new StaticPlacable(Vector2.zero, 1, 1), checkCell)) continue;
+
+                Vector3 worldPos = grid.CellToWorld(checkCell);
+                if (IsNearOtherObject(worldPos, noSpawnRadius, grid)) continue;
+
+                path.Add(checkCell);
+                current = nextPos;
+                placedNext = true;
+                break;
+            }
+
+            if (!placedNext) break;
+        }
+
+        return path;
+    }
+
+    private static bool IsNearOtherObject(Vector3 pos, float radius, ChunkGrid grid)
+    {
+        foreach (var occupied in grid.GetOccupiedWorldPositions())
+        {
+            if (Vector3.Distance(pos, occupied) < radius)
+                return true;
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
 }

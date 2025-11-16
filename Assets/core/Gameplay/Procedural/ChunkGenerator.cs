@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Environment;
-using Core; // for ProceduralSettings
+using Core;
+using System.Threading.Tasks; // for ProceduralSettings
 
 public class ChunkGenerator : MonoBehaviour
 {
@@ -25,11 +26,13 @@ public class ChunkGenerator : MonoBehaviour
             Debug.LogError("ProceduralSettings not assigned in GameManager.");
         }
     }
-    private void Start()
+    private async void Start()
     {
         hazardsParent = transform;
+        await Task.Delay(100);
         difficulty = GameManager.Instance.difficulty;
         StartCoroutine(GenerateChunkCoroutine(transform.position.y-25));
+        Debug.Log(transform.position.y - 25);
     }
 
     public IEnumerator GenerateChunkCoroutine(float baseY)
@@ -60,11 +63,13 @@ public class ChunkGenerator : MonoBehaviour
         // Iterate through spawn actions
         foreach (var spawnAction in spawners)
         {
+            yield return new WaitForSeconds(0.1f);
+
             spawnAction?.Invoke();
             yield return null; 
         }
 
-        Debug.Log($"Chunk at Y={baseY} generated with {spawners.Count} hazard groups.");
+        //Debug.Log($"Chunk at Y={baseY} generated with {spawners.Count} hazard groups.");
     }
 
     /// Utility to randomize list order.

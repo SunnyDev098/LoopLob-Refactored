@@ -1,3 +1,4 @@
+using Core;
 using Gameplay.Player;
 using UnityEngine;
 
@@ -44,6 +45,12 @@ public class CameraFollowBall : MonoBehaviour
                     Time.deltaTime * followSpeed
                 );
             }
+        }
+
+        if (GameManager.Instance!=null)
+        {
+           GameManager.Instance.difficulty = ((transform.position.y / 2500) + 0.05f) *1.5f;
+
         }
     }
 

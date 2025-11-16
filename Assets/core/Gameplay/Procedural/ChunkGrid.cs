@@ -99,4 +99,19 @@ public class ChunkGrid
             }
         }
     }
+    public IEnumerable<Vector3> GetOccupiedWorldPositions()
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                Vector2Int cell = new Vector2Int(x, y);
+                if (!availableCells.Contains(cell))
+                {
+                    yield return CellToWorld(cell);
+                }
+            }
+        }
+    }
+
 }

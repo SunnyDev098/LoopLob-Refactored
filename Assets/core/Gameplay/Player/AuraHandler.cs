@@ -1,37 +1,32 @@
-namespace Gameplay.player
+﻿namespace Gameplay.Player
 {
     using UnityEngine;
     using System.Collections;
     using Core; // for EventBus
 
     /// <summary>
-    /// Handles an aura effect around an object by animating scale and alpha.
-    /// Triggers a GameOver event when the animation completes.
+    /// Handles an aura-like color transition on a referenced SpriteRenderer.
+    /// Animates color from white to red over a time period, then triggers GameOver.
     /// </summary>
-    [RequireComponent(typeof(SpriteRenderer))]
     public class AuraHandler : MonoBehaviour
     {
         [Header("Aura Settings")]
-        [SerializeField] private float duration = 1f;                // Total time to reach target
-        [SerializeField] private float targetScale = 1.5f;            // Scale multiplier at peak
-        [SerializeField, Range(0f, 1f)] private float targetAlpha = 1f; // Alpha at peak
-        [SerializeField] private bool triggerGameOverOnLimit = true;  // End game when aura completes
-      
+        [SerializeField] private SpriteRenderer targetRenderer;       // SpriteRenderer to colorize
+        [SerializeField] public float duration = 4f;                 // Time to reach target color
+        [SerializeField] private Color startColor = Color.white;      // Starting color
+        [SerializeField] private Color targetColor = Color.red;       // Target color
+        [SerializeField] private bool triggerGameOverOnLimit = true;  // Optional game-over trigger
 
-        private SpriteRenderer spriteRenderer;
-        private Vector3 initialScale;
-        private float initialAlpha;
         private Coroutine auraRoutine;
 
         private void Awake()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            initialScale = transform.localScale;
-            initialAlpha = spriteRenderer.color.a;
+            if (targetRenderer == null)
+                targetRenderer = GetComponent<SpriteRenderer>();
         }
 
         /// <summary>
-        /// Starts the aura animation.
+        /// Starts the color animation on the target SpriteRenderer.
         /// </summary>
         public void StartAura()
         {
@@ -42,7 +37,7 @@ namespace Gameplay.player
         }
 
         /// <summary>
-        /// Resets aura to its original scale and alpha instantly.
+        /// Instantly resets color to the start color.
         /// </summary>
         public void ResetAura()
         {
@@ -52,8 +47,8 @@ namespace Gameplay.player
                 auraRoutine = null;
             }
 
-            transform.localScale = initialScale;
-            SetAlpha(initialAlpha);
+            if (targetRenderer != null)
+                targetRenderer.color = startColor;
         }
 
         private IEnumerator AuraAnimationRoutine()
@@ -62,7 +57,7 @@ namespace Gameplay.player
 
             while (elapsed < duration)
             {
-                // Optional pause support
+                // Support pause handling (optional)
                 if (GameManager.Instance != null && GameManager.Instance.IsGamePaused())
                 {
                     yield return null;
@@ -71,34 +66,22 @@ namespace Gameplay.player
 
                 float t = elapsed / duration;
 
-                // Scale interpolation
-                transform.localScale = Vector3.Lerp(initialScale, initialScale * targetScale, t);
-
-                // Alpha interpolation
-                float alphaValue = Mathf.Lerp(initialAlpha, targetAlpha, t);
-                SetAlpha(alphaValue);
+                // Interpolate color from white → red
+                if (targetRenderer != null)
+                    targetRenderer.color = Color.Lerp(startColor, targetColor, t);
 
                 elapsed += Time.deltaTime;
                 yield return null;
             }
 
-            // Ensure final state
-            transform.localScale = initialScale * targetScale;
-            SetAlpha(targetAlpha);
+            // Ensure final color
+            if (targetRenderer != null)
+                targetRenderer.color = targetColor;
 
-            // Trigger game-over via EventBus
+            // EventBus trigger
             if (triggerGameOverOnLimit)
-            {
-              //  EventBus.RaiseGameOver();
-            
-            }
-        }
-
-        private void SetAlpha(float alpha)
-        {
-            Color c = spriteRenderer.color;
-            c.a = alpha;
-            spriteRenderer.color = c;
+                targetRenderer.color = startColor;
+                EventBus.RaiseGameOver();
         }
     }
 }

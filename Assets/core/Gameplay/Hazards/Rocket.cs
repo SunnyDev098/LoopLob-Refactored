@@ -8,6 +8,15 @@ public class Rocket : MonoBehaviour,IHitBall
 
     public void OnHitBall(BallController ballController)
     {
-       EventBus.RaiseGameOver();
+
+        if (GameManager.Instance.isShieldActive)
+        {
+            GameManager.Instance.DeActiveSheildCall();
+        }
+        else
+        {
+            EventBus.RaiseGameOver();
+
+        }
     }
 }

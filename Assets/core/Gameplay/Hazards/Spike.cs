@@ -14,8 +14,14 @@ public class Spike : MonoBehaviour, IHitBall
     }
     public void OnHitBall(BallController ball)
     {
-        // Simple example: End the game
-        EventBus.RaiseGameOver();
+        if (GameManager.Instance.isShieldActive)
+        {
+            GameManager.Instance.DeActiveSheildCall();
+        }
+        else
+        {
+            EventBus.RaiseGameOver();
 
+        }
     }
 }

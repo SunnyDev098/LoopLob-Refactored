@@ -14,40 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetPrefab: {fileID: 6555924651408547538, guid: 71b7322ee368a9547abc2e5f543b776a, type: 3}
   spikePrefab: {fileID: 5500117242909943883, guid: 97b649a2f1ca1564587ccf707ac9fcb7, type: 3}
-  blackHolePrefab: {fileID: 6621120231972223764, guid: d218994ec09402541a65db9884a2f1f8, type: 3}
-  alienShipPrefab: {fileID: 6153084849508170010, guid: 202385ae6d5352c49b9d338770a35d65, type: 3}
+  blackHolePrefab: {fileID: 66985134351384752, guid: dee3e13321eab254e86f16d4bdb81bea, type: 3}
+  alienShipPrefab1: {fileID: 6153084849508170010, guid: 202385ae6d5352c49b9d338770a35d65, type: 3}
+  alienShipPrefab2: {fileID: 6153084849508170010, guid: f85697f8a3e473e499a1f32c55b827aa, type: 3}
   beamEmitterPrefab: {fileID: 1755857207460168140, guid: 1d4fe635448c8fa4c974c8d4496b5831, type: 3}
   laserGunPrefab: {fileID: 980303768243886007, guid: 7717afbe547dea4449825351d177c619, type: 3}
   missilePrefab: {fileID: 4321580585380483403, guid: 5158331f58046694d873b44acec89c21, type: 3}
   badPlanetPrefab: {fileID: 6555924651408547538, guid: 71b7322ee368a9547abc2e5f543b776a, type: 3}
+  coinPrefab: {fileID: 3394055694061139900, guid: 4c8062fadae2d1449b13491e68ce65fb, type: 3}
+  coinTrailCountRange: {x: 1, y: 3}
+  coinSpacing: 2
+  coinTrailCurveChance: 0.6
+  coinTrailMinLength: 1
+  coinTrailMaxLength: 5
+  coinTrailCurveHoldMin: 2
+  coinTrailCurveExitChance: 0.25
   spikeThreshold: 0.05
   blackHoleThreshold: 0.06
   alienShipThreshold: 0.1
-  beamEmitterThreshold: 0.2
-  laserGunThreshold: 0
+  beamEmitterThreshold: 0.16
+  laserGunThreshold: 0.35
   rocketLauncherThreshold: 0.5
   badPlanetThreshold: 0.7
   badPlanetChance: 0.3
-  spikeCountRange: {x: 5, y: 10}
+  spikeCountRange: {x: 4, y: 5}
   blackHoleCountRange: {x: 1, y: 3}
-  beamEmitterCountRange: {x: 1, y: 3}
-  planetCountRange: {x: 5, y: 8}
-  alienCountRange: {x: 1, y: 4}
-  missileCountRange: {x: 0, y: 2}
+  beamEmitterCountRange: {x: 0, y: 2}
+  planetCountRange: {x: 7, y: 8}
+  alienCountRange: {x: 0, y: 2}
+  missileCountRange: {x: 0, y: 1}
   laserGunCountRange: {x: 1, y: 3}
-  laserGunHSpan: 3
-  laserGunVSpan: 3
+  laserGunHSpan: 1
+  laserGunVSpan: 1
   laserGunSafeEdgeMargin: 0.5
-  spikeHSpan: 2
-  spikeVSpan: 2
+  spikeHSpan: 4
+  spikeVSpan: 4
   blackHoleHSpan: 5
   blackHoleVSpan: 5
   beamEmitterHSpan: 4
   beamEmitterVSpan: 4
   minObjectSpacing: 2.5
   hazardSafeEdgeMargin: 0.5
-  minPlanetSize: 1
-  maxPlanetSize: 2
+  minPlanetSize: 1.2
+  maxPlanetSize: 1.6
   planetSizeCurve:
     serializedVersion: 2
     m_Curve:
@@ -55,16 +64,25 @@ MonoBehaviour:
       time: 0
       value: 2
       inSlope: 0
-      outSlope: -1
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
-      value: 1
+      time: 0.49581844
+      value: 1.4879158
+      inSlope: -0.63550454
+      outSlope: -0.63550454
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99816895
+      value: 1.1122742
       inSlope: -1
-      outSlope: 0
+      outSlope: -1
       tangentMode: 0
       weightedMode: 0
       inWeight: 0

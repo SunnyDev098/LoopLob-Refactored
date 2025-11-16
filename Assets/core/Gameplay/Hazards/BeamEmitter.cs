@@ -69,6 +69,14 @@ public class BeamEmitter : MonoBehaviour, IHitBall
     }
     public void OnHitBall(BallController ball)
     {
-        EventBus.RaiseGameOver();
+        if (GameManager.Instance.isShieldActive)
+        {
+            GameManager.Instance.DeActiveSheildCall();
+        }
+        else
+        {
+            EventBus.RaiseGameOver();
+
+        }
     }
 }

@@ -8,17 +8,23 @@ public class DataHandler : MonoBehaviour
     private const string COIN_PREF_KEY = "PlayerCoinsAmount";
     private const string BEST_SCORE_PREF_KEY = "PlayerBestScore";
     private const string USER_NAME_PREF_KEY = "PlayerUserName";
+    private const string BACK_GROUND_INDEX_KEY = "BackGroundIndex";
 
     private int bestscore;
     private int totalcoins;
     private string username;
+    public int backGroundIndex;
+
+    private bool isLeaderBoardReady;
+
+  
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // persist across scene changes
+            DontDestroyOnLoad(gameObject); 
         }
         else if (Instance != this)
         {
@@ -29,6 +35,8 @@ public class DataHandler : MonoBehaviour
 
     private void Start()
     {
+      //  PlayerPrefs.DeleteAll();
+
         DataInitiator();
         Application.targetFrameRate = 60;
     }
@@ -67,7 +75,19 @@ public class DataHandler : MonoBehaviour
             username = null;
         }
 
-        PlayerPrefs.Save(); 
+
+        if (PlayerPrefs.HasKey(BACK_GROUND_INDEX_KEY))
+        {
+            backGroundIndex = PlayerPrefs.GetInt(BACK_GROUND_INDEX_KEY);
+            Debug.Log(backGroundIndex);
+        }
+        else
+        {
+            backGroundIndex = 0;
+        }
+
+        PlayerPrefs.Save();
+
     }
 
     // ----------------- coins -----------------------
@@ -97,6 +117,14 @@ public class DataHandler : MonoBehaviour
     }
 
     // ----------------- userName -----------------------
+
+    public string GetUserName()
+    {
+        return username;
+
+
+    }
+
     public void SetUserName(string name)
     {
         username = name;
@@ -104,8 +132,29 @@ public class DataHandler : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public string GetUserName()
+    // ----------------- backGround -----------------------
+
+    public int GetBackGroundIndex()
     {
-        return username;
+        return backGroundIndex;
+
+
+    }
+
+    public void SetBackGroundIndex(int index)
+    {
+        backGroundIndex = index;
+        PlayerPrefs.SetInt(BACK_GROUND_INDEX_KEY, index);
+        PlayerPrefs.Save();
+    }
+
+    public void SetLeaderBoard(bool isReady)
+    {
+        isLeaderBoardReady = isReady;
+    }
+
+    public bool GetLeaderBoard()
+    {
+        return isLeaderBoardReady;
     }
 }

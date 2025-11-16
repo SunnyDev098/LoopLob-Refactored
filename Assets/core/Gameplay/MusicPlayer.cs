@@ -52,7 +52,7 @@ public class MusicPlayer : MonoBehaviour
             audioMixer.SetFloat(MUSIC_PREF_KEY, Mathf.Lerp(-30f, 10f, 0.5f));
 
         }
-        if (PlayerPrefs.HasKey(MUSIC_PREF_KEY))
+        if (PlayerPrefs.HasKey(SFX_PREF_KEY))
         {
             audioMixer.SetFloat(SFX_PREF_KEY, Mathf.Lerp(-30f, 10f, PlayerPrefs.GetFloat(SFX_PREF_KEY)));
         }

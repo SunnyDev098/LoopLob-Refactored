@@ -1,6 +1,7 @@
 namespace Core
 {
     using Environment;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using TMPro;
@@ -18,12 +19,17 @@ namespace Core
         [Header("UI References")]
         public GameObject AttachedPlanet;
         public bool IsDebugMode;
+        public bool ballCanMove;
+        public int lastbally;
 
         [SerializeField] private GameObject powerUpStuff;
         [SerializeField] public AudioSource audioSource;
         public GameObject Ball;
         public GameObject Camera;
         public GameObject TopBar;
+        public GameObject Shield;
+        public GameObject Magnet;
+       
         public TextMeshProUGUI CoinTxt;
 
         private Dictionary<string, string> globalUserMessageDic = new();
@@ -31,17 +37,15 @@ namespace Core
         private bool gameRunning;
         private float pauseMomentTimeScale = 1f;
 
-        private bool gameStarted;
+        public bool gameStarted;
         private bool inPowerUps;
         private bool isLaserActive;
-        private bool isShieldActive;
-        private bool isMagnetActive;
+        public bool isShieldActive;
+        public bool isMagnetActive;
 
-        private int bestScore;
+        public bool isBestScore ;
         private int currentScore;
-        private int coinNumber;
-        private float musicVolume;
-        private float sfxVolume;
+        public int coinNumber;
 
         private GameObject camTarget;
         private bool noDeath;
@@ -67,16 +71,25 @@ namespace Core
         public int NextDangerZoneHeight { get => nextDangerZoneHeight; set => nextDangerZoneHeight = value; }
         public bool CheckForDangerZone { get => checkForDangerZone; set => checkForDangerZone = value; }
 
-        public float difficulty;
+        public  float difficulty;
 
         private void Awake()
         {
-           
+            Scene activeScene = SceneManager.GetActiveScene();
+            if (activeScene.name != "CoreGame")
+            {
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                gameObject.SetActive(true);
 
+            }
             if (Instance == null)
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
+
             }
             else if (Instance != this)
             {
@@ -84,12 +97,10 @@ namespace Core
                 return;
             }
 
-
-            
-            LoadSettings(); 
+            IsGameOver = false;
         }
-     
-       
+
+
         private void Start()
         {
             gameRunning = true;
@@ -97,36 +108,46 @@ namespace Core
             isLaserActive = true;
             isMagnetActive = false;
             noDeath = false;
-            gameStarted = true;
             currentGameLevel = 0;
-
+            isBestScore = false;
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
 
-           
+
         }
         private void Update()
         {
-            difficulty = (Camera.transform.position.y / 2500) + 0.05f;
         }
-        private void LoadSettings()
-        {
-            SfxVolume = PlayerPrefs.GetFloat("sfx_volume", 1f);
-        }
+       
 
       //  #region Game Flow
         public void EndGame(int finalScore)
         {
             if (IsGameOver) return;
 
-            IsGameOver = true;
             SetGamePaused(true);
             Debug.Log($"Game Over! Final score: {finalScore}");
+            ballCanMove = false;
+            Ball.transform.GetChild(2).gameObject.SetActive(false);
+            if (finalScore > DataHandler.Instance.GetBestScore())
+            {
+                isBestScore = true;
+                DataHandler.Instance.SaveBestScore(finalScore);
+
+
+            }
+
+            DataHandler.Instance.SaveTotalCoins(coinNumber);
+
+
+
+
         }
         private void OnEnable()
         {
-            EventBus.OnGameOver += HandleGameOver;
+
             SceneManager.sceneLoaded += OnSceneLoaded;
+            EventBus.OnGameOver += HandleGameOver;
 
         }
 
@@ -144,14 +165,27 @@ namespace Core
         }
         private async void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            await Task.Delay(200);
-            Ball = GameObject.FindGameObjectWithTag("Ball");
-            Camera = GameObject.FindGameObjectWithTag("MainCamera");
-            TopBar = GameObject.FindGameObjectWithTag("TopBar");
-            CoinTxt = GameObject.FindGameObjectWithTag("CoinTxt").GetComponent<TextMeshProUGUI>();
-            coinNumber = DataHandler.Instance.GetTotalCoins();
-            CoinTxt.text = coinNumber.ToString();
+            try
+            {
+                await Task.Delay(200);
+
+                Ball = GameObject.FindGameObjectWithTag("Ball");
+                Camera = GameObject.FindGameObjectWithTag("MainCamera");
+                TopBar = GameObject.FindGameObjectWithTag("TopBar");
+
+                Shield = Ball.transform.GetChild(2).gameObject;
+                Magnet = Ball.transform.GetChild(3).gameObject;
+
+                CoinTxt = GameObject.FindGameObjectWithTag("CoinTxt").GetComponent<TextMeshProUGUI>();
+                coinNumber = DataHandler.Instance.GetTotalCoins();
+                CoinTxt.text = coinNumber.ToString();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[OnSceneLoaded] Exception: {ex.Message}\n{ex.StackTrace}");
+            }
         }
+
         public void ResetGame()
         {
             IsGameOver = false;
@@ -159,6 +193,8 @@ namespace Core
         }
         public void ResetGameAndScene()
         {
+            difficulty = 0;
+            gameStarted = false;
             IsGameOver = false;
             TotalPoints = 0;
             currentScore = 0;
@@ -166,8 +202,11 @@ namespace Core
             isShieldActive = false;
             isLaserActive = false;
             isMagnetActive = false;
+            isBestScore = false;
 
+            SetGamePaused(false);
             EventBus.RaiseScoreChanged(0);
+            lastbally = 0;
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentSceneIndex);
         }
@@ -179,14 +218,18 @@ namespace Core
         }
         public void SetCurrentScore(int score) => currentScore = score;
         public int GetCurrentScore() => currentScore;
+        public int increaseCurrentScore(int plusScore) => currentScore = currentScore+ plusScore;
 
+        public void DeActiveSheildCall()
+        {
+            Shield.SetActive(false);
+            Invoke("DeActiveSheild", 2);
+        }
 
-        // #region Volumes
-        public void SetMusicVolume(float volume) => musicVolume = volume;
-        public float GetMusicVolume() => musicVolume;
-        public void SetSfxVolume(float volume) => sfxVolume = volume;
-        public float GetSfxVolume() => sfxVolume;
-        public void SetSfxVolume(int volume) => sfxVolume = volume;
+        public void DeActiveSheild()
+        {
+            isShieldActive = false ;
+        }
 
      //   #region Power-Ups
         public bool IsShieldActive() => isShieldActive;
@@ -207,7 +250,7 @@ namespace Core
       //  #region Game State
 
         public bool IsGamePaused() => !gameRunning;
-        public void SetGamePaused(bool paused) => gameRunning = paused;
+        public void SetGamePaused(bool paused) => gameRunning = !paused;
 
      //   #region Camera
         public void SetCameraTarget(GameObject target) => camTarget = target;

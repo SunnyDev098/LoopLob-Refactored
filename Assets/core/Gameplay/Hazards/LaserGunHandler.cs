@@ -27,7 +27,7 @@ public class LaserGunHandler : MonoBehaviour
 
     private async void Start()
     {
-        await Task.Delay(200);
+        await Task.Delay(100);
 
         isLeftGun = Random.value < 0.5f;
 
@@ -40,10 +40,7 @@ public class LaserGunHandler : MonoBehaviour
         StartCoroutine(RotateAndShootRoutine());
 
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (isLeftGun && sr != null)
-        {
-          //  sr.flipX = true;
-        }
+     
 
     }
 
@@ -95,7 +92,7 @@ public class LaserGunHandler : MonoBehaviour
 
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
         // Determine shoot direction
-        Vector2 shootDirection = isLeftGun ? -transform.right : transform.right;
+        Vector2 shootDirection = transform.right;
 
         if (rb != null)
         {

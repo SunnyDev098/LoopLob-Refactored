@@ -116,10 +116,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8d8bd4fb2b85394c9da7051d304b153, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBadPlanet: 0
+  isMoving: 0
   activatedOrbit: {fileID: 2330142830916770746}
-  movingPlanet: 0
+  ExplosionVfx: {fileID: 0}
   xRange: 3
-  verticalCurve:
+  movementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -143,6 +145,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  lifespanSliderObject: {fileID: 0}
+  lifespanSlider: {fileID: 0}
+  badPlanetLifespan: 3
+  BadPlanetSprite: {fileID: 0}
+  IsAnchoreToBall: 0
 --- !u!58 &8230905668443742533
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -237,6 +244,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2383456615004064943, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845328637589187555, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.22352941
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845328637589187555, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.14509805
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845328637589187555, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4290462177061490814, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}

@@ -4,15 +4,20 @@
 TagManager:
   serializedVersion: 3
   tags:
+  - TopBar
+  - newBest
+  - DeathScore
+  - Canvas
+  - CoinTxt
+  - alien_wandering
+  - beam_emitter
   - laser_gun
   - laser
-  - twin_gate
-  - beam_emitter
   - missile
-  - alien_wandering
   - Ball
-  - TopBar
-  - CoinTxt
+  - final_send
+  - Coin
+  - Magnet
   layers:
   - Default
   - TransparentFX

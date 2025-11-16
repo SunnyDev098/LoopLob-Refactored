@@ -2,6 +2,7 @@
 using Firebase;
 using Firebase.Auth;
 using Firebase.Firestore;
+using Firebase.Analytics;
 using System;
 using System.Threading.Tasks;
 //using Firebase.Messaging;
@@ -18,8 +19,7 @@ public class FireBaseStarter : MonoBehaviour
 
     public static string CurrentFcmToken { get; private set; }
 
-    public GameObject AuthPanel;
-    public GameObject MainMenu;
+
 
     private FirebaseAuth auth;
 
@@ -36,12 +36,7 @@ public class FireBaseStarter : MonoBehaviour
         //  Firebase init
         await InitFirebase();
 
-        //  Scene setup after Firebase is ready
-        if (PlayerPrefs.HasKey("username"))
-        {
-            if (MainMenu != null) MainMenu.SetActive(true);
-            if (AuthPanel != null) AuthPanel.SetActive(false);
-        }
+       
     }
 
     private async Task RequestNotificationPermission()
@@ -78,7 +73,7 @@ public class FireBaseStarter : MonoBehaviour
                 // -------- AUTH INIT --------
                 auth = FirebaseAuth.DefaultInstance;
                 await SignInAnonymously();
-               
+                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
                 // -------- MESSAGING INIT --------
                 /*
                 FirebaseMessaging.MessageReceived += OnMessageReceived;
@@ -93,7 +88,7 @@ public class FireBaseStarter : MonoBehaviour
 
                 Debug.Log("Firebase Messaging listeners set.");
                 */
-               
+
             }
             else
             {

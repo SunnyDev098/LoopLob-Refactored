@@ -99,7 +99,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 5898127349694658016, guid: 51a3537fb8a435d4bb5453bc6e570ccc, type: 2}
-  m_audioClip: {fileID: 8300000, guid: d088505795dd5164ca864ef63ebc4ac7, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: d088505795dd5164ca864ef63ebc4ac7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -205,6 +205,6 @@ MonoBehaviour:
   maxAimAngle: 25
   rotationSpeed: 40
   projectilePrefab: {fileID: 6558413057120206410, guid: ab48854bcacb0d7468599a40f48fe847, type: 3}
-  projectileSpeed: 12
+  projectileSpeed: 6
   timeBetweenShots: 0.15
   shotOffsetZ: 1

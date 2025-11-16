@@ -1,6 +1,8 @@
 using Core;
 using Gameplay.Interfaces;
 using Gameplay.Player;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -8,15 +10,17 @@ public class PlanetAnchor : MonoBehaviour, IHitBall
 {
     [SerializeField] private GameObject scoreObject;
     private bool isItFirstAttach;
-    private static int lastScoreBallY;
+    private  int lastScoreBallY;
+    private  int currentBallY;
 
   
     private void Start()
     {
         isItFirstAttach = true;
-        lastScoreBallY = 0;
+
+
     }
-    public void OnHitBall(BallController ball)
+    public  void OnHitBall(BallController ball)
     {
         GameManager.Instance.AttachedPlanet = transform.gameObject;
         ball.AnchorTo(transform);
@@ -25,19 +29,23 @@ public class PlanetAnchor : MonoBehaviour, IHitBall
 
         if (isItFirstAttach)
         {
+            Debug.Log(lastScoreBallY);
+            Debug.Log((int)ball.transform.position.y);
             isItFirstAttach =false;
 
-            int currentBallY = (int)ball.transform.position.y;
+            currentBallY = (int)ball.transform.position.y;
             if (currentBallY > lastScoreBallY)
             {
-                createScore((currentBallY - lastScoreBallY));
-                lastScoreBallY = currentBallY;
-                Core.EventBus.RaiseScoreChanged(currentBallY);
+                
+                createScore((int)transform.position.y -GameManager.Instance.lastbally);
 
-
+                GameManager.Instance.increaseCurrentScore(((int)transform.position.y - GameManager.Instance.lastbally));
+                EventBus.RaiseScoreChanged((GameManager.Instance.GetCurrentScore()));
+                GameManager.Instance.lastbally = (int)transform.position.y;
             }
            
         }
+        lastScoreBallY = currentBallY;
 
     }
 

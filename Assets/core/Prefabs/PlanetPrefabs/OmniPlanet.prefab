@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 3210e88185470fd45b02f00a2da1650f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6178ca90526769445a67836b2ded23a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -149,7 +149,8 @@ MonoBehaviour:
   lifespanSliderObject: {fileID: 6887517433754130298}
   lifespanSlider: {fileID: 6887517433754130296}
   badPlanetLifespan: 3
-  BadPlanetSprite: {fileID: 21300000, guid: a6d242b83a71af24e8c1ba605a8086ff, type: 3}
+  BadPlanetSprite: {fileID: 21300000, guid: fa6c3ccb28987014d9b2e64982ac4bfe, type: 3}
+  IsAnchoreToBall: 0
 --- !u!58 &8230905668443742533
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -244,6 +245,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2383456615004064943, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845328637589187555, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 0.22352941
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845328637589187555, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.14509805
+      objectReference: {fileID: 0}
+    - target: {fileID: 2845328637589187555, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4290462177061490814, guid: ab5528947d74e4d4498c5ac0a6969306, type: 3}
