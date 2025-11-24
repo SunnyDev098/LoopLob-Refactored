@@ -22,14 +22,17 @@ namespace Gameplay.Player
         private float orbitRadius;
         private float bounceXLimit = 5;
         // Movement
-        private Vector2 moveDirection;   // current free-flight direction
+        public Vector2 moveDirection;   // current free-flight direction
         private Vector2 tangentDirection; // tangent at detach moment
 
 
         [SerializeField] private AuraHandler auraHandler;
         [SerializeField] private BallAudioHandler ballAudioHandler;
 
+
+        public bool ballEnabled = true;
         public float lastAnchorTime;
+       // public bool clockWise = true;
         private void Reset()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -78,16 +81,44 @@ namespace Gameplay.Player
                 orbitRadius = Vector2.Distance(transform.position, anchorPlanet.position);
             }
 
-            // Orbit around planet
+
             transform.RotateAround(anchorPlanet.position, Vector3.back, rotationAmount);
             totalRotation += rotationAmount;
-
             // Keep radius locked (correct any drift over time)
             Vector3 dir = (transform.position - anchorPlanet.position).normalized;
             transform.position = anchorPlanet.position + dir * orbitRadius;
 
             // Tangent direction for when we detach
             tangentDirection = new Vector2(-dir.y, dir.x).normalized;
+            /*
+            // Orbit around planet
+            if (clockWise)
+            {
+                transform.RotateAround(anchorPlanet.position, Vector3.back, rotationAmount);
+                totalRotation += rotationAmount;
+                // Keep radius locked (correct any drift over time)
+                Vector3 dir = (transform.position - anchorPlanet.position).normalized;
+                transform.position = anchorPlanet.position + dir * orbitRadius;
+
+                // Tangent direction for when we detach
+                tangentDirection = new Vector2(-dir.y, dir.x).normalized;
+            }
+            else
+            {
+                transform.RotateAround(anchorPlanet.position, Vector3.forward, rotationAmount);
+                totalRotation += rotationAmount;
+                // Keep radius locked (correct any drift over time)
+                Vector3 dir = (transform.position - anchorPlanet.position).normalized;
+                transform.position = anchorPlanet.position + dir * orbitRadius;
+
+                // Tangent direction for when we detach
+                tangentDirection = new Vector2(-dir.y, dir.x).normalized;
+
+            }
+            */
+
+
+
         }
         // ———————————————————————— Bounce Logic ———————————————————————— //
 
@@ -101,6 +132,8 @@ namespace Gameplay.Player
                 transform.position += new Vector3(-0.25f, moveDirection.y*0.1f, 0);
                 ballAudioHandler.playBounce();
 
+                float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0f, 0f, angle);
             }
             else if (pos.x <= -bounceXLimit)
             {
@@ -108,22 +141,58 @@ namespace Gameplay.Player
                 transform.position += new Vector3(0.25f, moveDirection.y * 0.1f, 0);
                 ballAudioHandler.playBounce();
 
+                float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
             }
         }
         // ———————————————————————— Public Actions ———————————————————————— //
 
         public void AttachToAnchor(Transform anchor)
         {
+
+            Debug.Log(transform.eulerAngles.z);
+            /*
+            if(Mathf.Abs(transform.eulerAngles.z+90) < 180)
+            {
+                clockWise = true;
+            }
+            else
+            {
+                clockWise = false;
+
+            }
+            */
             anchorPlanet = anchor;
             isAnchored = true;
             totalRotation = 0f;
-            anchorPlanet.GetComponent<PlanetAttribute>().IsAnchoreToBall = true;
+
+            var planetAttr = anchorPlanet.GetComponent<PlanetAttribute>();
+            planetAttr.IsAnchoreToBall = true;
+
             moveDirection = Vector2.zero;
             rb.linearVelocity = Vector2.zero;
+
             OnBallAnchoredToPlanet();
             GameManager.Instance.SetBallAttached(true);
             ballAudioHandler.playAttach();
             lastAnchorTime = Time.time;
+
+            Vector2 toAnchor = anchor.position - transform.position;
+
+
+            Vector3 dir = (transform.position - anchorPlanet.position).normalized;
+            transform.position = anchorPlanet.position + dir * orbitRadius;
+
+            // Tangent direction for when we detach
+            tangentDirection = new Vector2(-dir.y, dir.x).normalized;
+
+            moveDirection = -tangentDirection;
+
+        
+
+            float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
         public void DetachFromAnchor()
         {
@@ -131,14 +200,30 @@ namespace Gameplay.Player
 
 
             if (lastAnchorTime + 0.1f > Time.time) return;
-            // Launch perpendicular to radius vector
+
             moveDirection = -tangentDirection;
+
+            /*
+            if (clockWise)
+            {
+                moveDirection = -tangentDirection;
+
+            }
+            else
+            {
+                moveDirection = tangentDirection;
+
+            }
+            */
 
             isAnchored = false;
             OnBallReleasedFromPlanet();
             anchorPlanet.GetComponent<PlanetAttribute>().IsAnchoreToBall = false;
             anchorPlanet.GetComponent<PlanetAttribute>().HideOrbitVisual();
             anchorPlanet = null;
+
+            float angle = Mathf.Atan2(-moveDirection.y,- moveDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
 
             GameManager.Instance.SetBallAttached(false);
@@ -160,10 +245,26 @@ namespace Gameplay.Player
         public void RotateInFreeFlight(bool toLeft)
         {
             if (isAnchored || GameManager.Instance.IsGamePaused()) return;
+            float delta; 
+            if (ballEnabled)
+            {
+                 delta = (toLeft ? 1f : -1f) * freeBallrotationSpeed * Time.deltaTime;
 
-            float delta = (toLeft ? 1f : -1f) * freeBallrotationSpeed * Time.deltaTime;
+            }
+            else
+            {
+                 delta = (toLeft ? 1f : -1f) * freeBallrotationSpeed * Time.unscaledDeltaTime;
+
+            }
+
+
+
             moveDirection = Quaternion.Euler(0f, 0f, delta) * moveDirection;
+
+            float angle = Mathf.Atan2(-moveDirection.y, -moveDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
+
 
         public void StopMovement()
         {

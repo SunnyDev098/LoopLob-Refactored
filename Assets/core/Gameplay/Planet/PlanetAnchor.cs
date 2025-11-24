@@ -29,8 +29,8 @@ public class PlanetAnchor : MonoBehaviour, IHitBall
 
         if (isItFirstAttach)
         {
-            Debug.Log(lastScoreBallY);
-            Debug.Log((int)ball.transform.position.y);
+          //  Debug.Log(lastScoreBallY);
+          //  Debug.Log((int)ball.transform.position.y);
             isItFirstAttach =false;
 
             currentBallY = (int)ball.transform.position.y;

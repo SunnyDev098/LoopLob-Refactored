@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Handles tutorial page navigation.
@@ -12,6 +13,9 @@ public class TutorialUIManager : MonoBehaviour
     [SerializeField] private List<GameObject> pages = new List<GameObject>();
 
     [Header("Navigation Buttons")]
+    [SerializeField] private Button inGameTutorial;
+
+
     [SerializeField] private Button menuButton;
     [SerializeField] private Button nextButton;
     [SerializeField] private Button backButton;
@@ -30,6 +34,7 @@ public class TutorialUIManager : MonoBehaviour
         if (menuButton) menuButton.onClick.AddListener(OnMainMenuClick);
         if (nextButton) nextButton.onClick.AddListener(OnNextClicked);
         if (backButton) backButton.onClick.AddListener(OnBackClicked);
+        if (inGameTutorial) inGameTutorial.onClick.AddListener(OnInGameTutorialClicked);
 
         ShowPage(0); 
 
@@ -79,6 +84,20 @@ public class TutorialUIManager : MonoBehaviour
         if (prevIndex >= 0)
             ShowPage(prevIndex);
         audioSource.PlayOneShot(pageFlip);
+
+
+    }
+
+    private async void OnInGameTutorialClicked()
+    {
+        DataHandler.Instance.firstTime = true;
+
+        mainMenuHandler.ShowMainMenu();
+        SceneDecoration.SetActive(true);
+
+
+        MusicPlayer.ResumeMusic();
+        SceneManager.LoadScene("CoreGame", LoadSceneMode.Single);
 
 
     }

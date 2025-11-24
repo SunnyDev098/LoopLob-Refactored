@@ -29,9 +29,11 @@ public class BackGroundObjectSpawner : MonoBehaviour
     // Banner tracking
     private float nextBannerTriggerY = 400f; // First trigger at Y=400
     private int bannerCount = 0;
-
+    private float timer;
+    private const float interval = 1f;
     private void Start()
     {
+        /*
         nextSpawnY = 50;
         if (camera == null)
         {
@@ -44,14 +46,21 @@ public class BackGroundObjectSpawner : MonoBehaviour
         {
             ScheduleNextSpawn(camera.transform.position.y + spawnDistanceGap);
         }
+        */
     }
 
     // spawning Big background objects and moving them with ball vertical movement
     private void Update()
     {
-        // Check for distance banner spawning
-        CheckAndSpawnDistanceBanner();
-
+       
+            timer += Time.deltaTime;
+            if (timer >= interval)
+            {
+                timer = 0f;
+                CheckAndSpawnDistanceBanner();
+            }
+        
+        /*
         if (currentIndex >= MaxObjects || spritesToSpawn.Count == 0)
             return;
 
@@ -64,6 +73,7 @@ public class BackGroundObjectSpawner : MonoBehaviour
         {
             transform.position = new Vector3(0, camera.transform.position.y * 0.8f, -10);
         }
+        */
     }
 
     /// <summary>
@@ -90,8 +100,8 @@ public class BackGroundObjectSpawner : MonoBehaviour
             Transform parent = bannerParentContainer != null ? bannerParentContainer : transform;
             GameObject banner = Instantiate(distanceBannerPrefab, bannerPosition, Quaternion.identity);
             banner.name = $"DistanceBanner_{bannerCount * 500}m";
-            banner.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>().text =(bannerCount * 500).ToString()+" m"  ;
-            // Update next trigger point (400, 900, 1400, ...)
+            float nextMark = Mathf.Ceil(camera.transform.position.y / 500f) * 500f;
+            banner.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = nextMark.ToString("0") + " m";            // Update next trigger point (400, 900, 1400, ...)
             nextBannerTriggerY = (bannerCount * bannerInterval) + (bannerInterval - 100f);
 
             Debug.Log($"Spawned distance banner at Y={bannerY} (trigger was Y={nextBannerTriggerY - bannerInterval + 100})");

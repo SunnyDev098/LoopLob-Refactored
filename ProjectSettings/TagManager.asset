@@ -18,6 +18,8 @@ TagManager:
   - final_send
   - Coin
   - Magnet
+  - OuterOrbit
+  - emitterAura
   layers:
   - Default
   - TransparentFX

@@ -49,8 +49,7 @@ public class CameraFollowBall : MonoBehaviour
 
         if (GameManager.Instance!=null)
         {
-           GameManager.Instance.difficulty = ((transform.position.y / 2500) + 0.05f) *1.5f;
-
+            GameManager.Instance.difficulty = Mathf.Clamp01(((transform.position.y / 2500f) + 0.05f) * 1.5f);
         }
     }
 

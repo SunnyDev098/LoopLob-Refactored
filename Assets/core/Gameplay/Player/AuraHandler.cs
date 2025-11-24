@@ -41,6 +41,7 @@
         /// </summary>
         public void ResetAura()
         {
+
             if (auraRoutine != null)
             {
                 StopCoroutine(auraRoutine);
@@ -81,7 +82,18 @@
             // EventBus trigger
             if (triggerGameOverOnLimit)
                 targetRenderer.color = startColor;
+
+
+            if (GameManager.Instance.IsShieldActive())
+            {
+                ResetAura();
+                GameManager.Instance.DeActiveSheildCall();
+            }
+            else
+            {
                 EventBus.RaiseGameOver();
+
+            }
         }
     }
 }

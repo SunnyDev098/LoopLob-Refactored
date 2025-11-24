@@ -24,6 +24,7 @@ public class AuthPanelHandler : MonoBehaviour
 
     [Header("Logic")]
     [SerializeField] private UsernameClaim usernameClaim;
+    [SerializeField] private PanelDecider panelDecider;
 
 
     private static readonly string[] BlockedWords = {
@@ -82,7 +83,7 @@ public class AuthPanelHandler : MonoBehaviour
 
     private async void OnTryLaterClicked()
     {
-        SwitchScene(AuthPanel, MainMenu);
+        panelDecider.ShowMenu();
     }
 
     private async void OnClaimClicked()
@@ -141,9 +142,5 @@ public class AuthPanelHandler : MonoBehaviour
     private void SetClaimButtonInteractable(bool state) =>
         claimButton.interactable = state;
 
-    private static void SwitchScene(GameObject fromScene, GameObject toScene)
-    {
-        if (fromScene != null) fromScene.SetActive(false);
-        if (toScene != null) toScene.SetActive(true);
-    }
+ 
 }

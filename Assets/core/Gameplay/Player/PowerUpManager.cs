@@ -13,9 +13,9 @@ public class PowerUpManager : MonoBehaviour
     public Button buttonMagnet;
 
     [Header("Prices")]
-    private int extraFuelPrice = 20;
-    private int shieldPrice = 30;
-    private int magnetPrice = 25;
+    private int extraFuelPrice = 15;
+    private int shieldPrice = 20;
+    private int magnetPrice = 10;
 
     [Header("Price Texts")]
     public TextMeshProUGUI shieldPriceTxt;
@@ -76,7 +76,7 @@ public class PowerUpManager : MonoBehaviour
         if (DataHandler.Instance.GetTotalCoins() >= extraFuelPrice)
         {
             buttonFuel.gameObject.SetActive(false);
-            auraHandler.duration = 6;
+            auraHandler.duration = 7.5f;
             audioSource.PlayOneShot(shield);
 
             DataHandler.Instance.SaveTotalCoins(DataHandler.Instance.GetTotalCoins() - extraFuelPrice);

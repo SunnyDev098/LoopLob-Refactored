@@ -13,6 +13,8 @@ namespace Core
     {
         public static GameManager Instance { get; private set; }
 
+
+       // public bool InTutorial;
         [Header("Config References")]
         public ProceduralSettings proceduralSettings;
 
@@ -29,6 +31,7 @@ namespace Core
         public GameObject TopBar;
         public GameObject Shield;
         public GameObject Magnet;
+        public float lastMissile;
        
         public TextMeshProUGUI CoinTxt;
 
@@ -113,7 +116,7 @@ namespace Core
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
 
-
+         
         }
         private void Update()
         {
@@ -182,7 +185,7 @@ namespace Core
             }
             catch (Exception ex)
             {
-                Debug.LogError($"[OnSceneLoaded] Exception: {ex.Message}\n{ex.StackTrace}");
+              //  Debug.LogError($"[OnSceneLoaded] Exception: {ex.Message}\n{ex.StackTrace}");
             }
         }
 

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
@@ -9,7 +11,13 @@ public class UIOptions : MonoBehaviour
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider sfxSlider;
     [SerializeField] private Button BackButton;
-    [SerializeField] private Button BackGroundButton;
+
+    [SerializeField] private Button BackGroundOptionsButton;
+    [SerializeField] private Button SellectBackGroundButton;
+
+    public TextMeshProUGUI BackChangeText;
+
+
 
     [SerializeField] private Button LeftBackGroundButton;
     [SerializeField] private Button RightBackGroundButton;
@@ -18,6 +26,7 @@ public class UIOptions : MonoBehaviour
 
     [SerializeField] private MainMenuHandler mainMenuHandler;
     [SerializeField] private AudioMixer  audioMixer;
+     private int temp_BG_index=0;
 
     private const string MUSIC_PREF_KEY = "MusicVolume";
     private const string SFX_PREF_KEY = "SFXVolume";
@@ -35,12 +44,15 @@ public class UIOptions : MonoBehaviour
         musicSlider.onValueChanged.AddListener(OnMusicVolumeChange);
         sfxSlider.onValueChanged.AddListener(OnSfxVolumeChange);
         BackButton.onClick.AddListener(OnBackButtonClick);
-        BackGroundButton.onClick.AddListener(OnBackGroundButtonClick);
+        BackGroundOptionsButton.onClick.AddListener(OnBackGroundOptionsButtonClick);
 
         LeftBackGroundButton.onClick.AddListener(OnLeftBackGroundButtonClick);
         RightBackGroundButton.onClick.AddListener(OnRightBackGroundButtonClick);
 
         BackToSettingsButton.onClick.AddListener(OnBackToSettingsButtonClick);
+
+
+        SellectBackGroundButton.onClick.AddListener(OnSellectBackGroundButtonClick);
 
 
     }
@@ -63,7 +75,7 @@ public class UIOptions : MonoBehaviour
     }
     private void OnBackButtonClick() => mainMenuHandler.ShowMainMenu();
 
-    private void OnBackGroundButtonClick() 
+    private void OnBackGroundOptionsButtonClick() 
     {
         foreach (GameObject obj in ToHideObjects)
         {
@@ -84,40 +96,72 @@ public class UIOptions : MonoBehaviour
             RightBackGroundButton.gameObject.SetActive(false);
         }
 
+        temp_BG_index = cameraBackGroundHandler.CurrentIndex;
 
     }
 
     private void OnLeftBackGroundButtonClick()
     {
-       cameraBackGroundHandler.ChangeBackGround(cameraBackGroundHandler.CurrentIndex - 1);
+        temp_BG_index = temp_BG_index - 1;
 
-        if (cameraBackGroundHandler.CurrentIndex == 0)
+        cameraBackGroundHandler.CurrentBackGround.sprite = cameraBackGroundHandler.BackGroundsList[temp_BG_index];
+
+        if (temp_BG_index == 0)
         {
             LeftBackGroundButton.gameObject.SetActive(false);
         }
 
-        if (cameraBackGroundHandler.CurrentIndex < cameraBackGroundHandler.BackGroundsList.Count - 1)
+        if (temp_BG_index < cameraBackGroundHandler.BackGroundsList.Count - 1)
         {
             RightBackGroundButton.gameObject.SetActive(true);
         }
+
+
+        if(temp_BG_index!= cameraBackGroundHandler.CurrentIndex)
+        {
+            SellectBackGroundButton.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            SellectBackGroundButton.gameObject.SetActive(false);
+
+        }
+
+        BackChangeText?.gameObject.SetActive(false);
+
     }
 
 
     private void OnRightBackGroundButtonClick()
     {
-        cameraBackGroundHandler.ChangeBackGround(cameraBackGroundHandler.CurrentIndex +1 );
+        temp_BG_index = temp_BG_index + 1;
 
 
+        cameraBackGroundHandler.CurrentBackGround.sprite = cameraBackGroundHandler.BackGroundsList[temp_BG_index];
 
-        if (cameraBackGroundHandler.CurrentIndex > 0)
+
+        if (temp_BG_index > 0)
         {
             LeftBackGroundButton.gameObject.SetActive(true);
         }
 
-        if (cameraBackGroundHandler.CurrentIndex == cameraBackGroundHandler.BackGroundsList.Count - 1)
+        if (temp_BG_index == cameraBackGroundHandler.BackGroundsList.Count - 1)
         {
             RightBackGroundButton.gameObject.SetActive(false);
         }
+        if (temp_BG_index != cameraBackGroundHandler.CurrentIndex)
+        {
+            SellectBackGroundButton.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            SellectBackGroundButton.gameObject.SetActive(false);
+
+        }
+        BackChangeText?.gameObject.SetActive(false);
+
 
     }
 
@@ -134,7 +178,61 @@ public class UIOptions : MonoBehaviour
 
       
         BackToSettingsButton.gameObject.SetActive(false);
+        SellectBackGroundButton.gameObject.SetActive(false);
+
+        cameraBackGroundHandler.CurrentBackGround.sprite = cameraBackGroundHandler.BackGroundsList[cameraBackGroundHandler.CurrentIndex];
+        BackChangeText?.gameObject.SetActive(false);
+
+    }
+
+
+    private void OnSellectBackGroundButtonClick()
+    {
+
+
+        cameraBackGroundHandler.CurrentIndex = temp_BG_index;
+
+        SellectBackGroundButton.gameObject.SetActive(false) ;
+
+        DataHandler.Instance.backGroundIndex = temp_BG_index;
+
 
         PlayerPrefs.Save();
+
+        backchangetoast(1500);
     }
+
+    private async void backchangetoast(int milis)
+    {
+        if (BackChangeText == null)
+            return;
+
+        var group = BackChangeText.GetComponent<CanvasGroup>();
+        if (group == null)
+            group = BackChangeText.gameObject.AddComponent<CanvasGroup>();
+
+        BackChangeText.gameObject.SetActive(true);
+
+        // Start fully visible
+        group.alpha = 1f;
+
+        // Wait for visible duration (1 second full alpha)
+        await Task.Delay(1500);
+
+        // Then gradually fade out
+        float fadeDuration = 0.5f; // seconds
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            await Task.Yield();
+            elapsed += Time.deltaTime;
+            group.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+        }
+
+        group.alpha = 0f;
+        BackChangeText.gameObject.SetActive(false);
+    }
+
+
 }

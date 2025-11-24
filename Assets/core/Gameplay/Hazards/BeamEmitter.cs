@@ -27,6 +27,8 @@ public class BeamEmitter : MonoBehaviour, IHitBall
     private void Start()
     {
         SetInitialSprite();
+
+        Invoke("CheckInitialOverlap", 1);
     }
 
     private void Update()
@@ -77,6 +79,27 @@ public class BeamEmitter : MonoBehaviour, IHitBall
         {
             EventBus.RaiseGameOver();
 
+        }
+    }
+
+
+   
+
+
+    private void CheckInitialOverlap()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
+
+        foreach (var hit in hits)
+        {
+            if (hit.gameObject == gameObject)
+                continue;
+
+            if (hit.enabled && hit.CompareTag("OuterOrbit"))
+            {
+                Destroy(gameObject);
+                return;
+            }
         }
     }
 }

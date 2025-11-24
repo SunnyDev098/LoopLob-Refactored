@@ -4,7 +4,6 @@ using UnityEngine;
 public class PanelDecider : MonoBehaviour
 {
 
-    public GameObject AuthPanel;
     public GameObject popUP;
     public GameObject MainMenu;
    async void   Start()
@@ -16,12 +15,23 @@ public class PanelDecider : MonoBehaviour
             popUP.SetActive(false);
             MainMenu.SetActive(true);
         }
-        else
+        else if (DataHandler.Instance.firstTime)
         {
             popUP.SetActive(true);
             MainMenu.SetActive(false);
         }
     }
 
-   
+
+    public void ShowAuth()
+    {
+        popUP.SetActive(true);
+        MainMenu.SetActive(false);
+    }
+
+    public void ShowMenu()
+    {
+        popUP.SetActive(false);
+        MainMenu.SetActive(true);
+    }
 }

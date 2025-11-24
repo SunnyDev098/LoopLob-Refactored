@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:961812587501:android:52803ebec230d1fa6e7de4",
+        "android_client_info": {
+          "package_name": "com.zeebaent.looplob"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcJ4-b0ezIw1PNcVnLtHOura6xfQAb1Zo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:961812587501:android:1fe83a6f11bdb4686e7de4",
         "android_client_info": {
           "package_name": "org.zeebaverse.looplob"

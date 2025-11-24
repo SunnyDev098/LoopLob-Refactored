@@ -39,6 +39,11 @@ namespace Gameplay.Player
         private void HandleRotationInput()
         {
 
+            if (!controller.ballEnabled)
+            {
+                return;
+            }
+
             bool leftKey = Input.GetKeyDown(KeyCode.LeftArrow);
             bool rightKey = Input.GetKeyDown(KeyCode.RightArrow);
             bool leftClick = Input.GetMouseButtonDown(0) && Input.mousePosition.x < Screen.width / 2f;
@@ -71,6 +76,9 @@ namespace Gameplay.Player
 
         private void HandleDetachInput()
         {
+
+
+            if (!controller.ballEnabled) return;            
 
 
             if (GameManager.Instance.gameStarted)

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8983901203776482847}
   m_Layer: 0
   m_Name: BlackHole 1 1
-  m_TagString: Untagged
+  m_TagString: emitterAura
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -211,11 +211,12 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  showDebugGizmos: 1
   rotationSpeed: -120
   minAlpha: 0.35
   maxAlpha: 0.6
   fadeTime: 1
+  scaleRangeEasy: {x: 0.1, y: 0.3}
+  scaleRangeHard: {x: 0.4, y: 0.6}
 --- !u!212 &8983901203776482847
 SpriteRenderer:
   m_ObjectHideFlags: 0

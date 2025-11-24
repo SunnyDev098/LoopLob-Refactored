@@ -10,22 +10,25 @@ public class Coin : MonoBehaviour, IHitBall
 
     private void Start()
     {
-        // Start delayed collision check
-        Invoke(nameof(CheckInitialOverlap), selfCheckDelay);
+        Invoke("CheckInitialOverlap", 1);
     }
 
     private void CheckInitialOverlap()
     {
-        // Collect all colliders that overlap this coin's current position
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.1f);
 
         foreach (var hit in hits)
         {
-            // Ignore self
-            if (hit.gameObject == gameObject) continue;
+            if (hit.gameObject == gameObject)
+                continue;
 
-            // If there's any other collider nearby (trigger or not), remove the coin
-            if (hit.enabled)
+            if (hit.enabled && hit.CompareTag("OuterOrbit"))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (hit.enabled && hit.CompareTag("emitterAura"))
             {
                 Destroy(gameObject);
                 return;

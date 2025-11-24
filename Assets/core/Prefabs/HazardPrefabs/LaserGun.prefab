@@ -206,5 +206,5 @@ MonoBehaviour:
   rotationSpeed: 40
   projectilePrefab: {fileID: 6558413057120206410, guid: ab48854bcacb0d7468599a40f48fe847, type: 3}
   projectileSpeed: 6
-  timeBetweenShots: 0.15
+  timeBetweenShots: 1
   shotOffsetZ: 1

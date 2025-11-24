@@ -30,20 +30,20 @@ MonoBehaviour:
   coinTrailCurveHoldMin: 2
   coinTrailCurveExitChance: 0.25
   spikeThreshold: 0.05
-  blackHoleThreshold: 0.06
+  blackHoleThreshold: 0.2
   alienShipThreshold: 0.1
   beamEmitterThreshold: 0.16
   laserGunThreshold: 0.35
-  rocketLauncherThreshold: 0.5
-  badPlanetThreshold: 0.7
+  rocketLauncherThreshold: 0.65
+  badPlanetThreshold: 0.8
   badPlanetChance: 0.3
-  spikeCountRange: {x: 4, y: 5}
+  spikeCountRange: {x: 1, y: 4}
   blackHoleCountRange: {x: 1, y: 3}
   beamEmitterCountRange: {x: 0, y: 2}
   planetCountRange: {x: 7, y: 8}
   alienCountRange: {x: 0, y: 2}
-  missileCountRange: {x: 0, y: 1}
-  laserGunCountRange: {x: 1, y: 3}
+  missileCountRange: {x: 0, y: 2}
+  laserGunCountRange: {x: 1, y: 2}
   laserGunHSpan: 1
   laserGunVSpan: 1
   laserGunSafeEdgeMargin: 0.5
@@ -55,8 +55,8 @@ MonoBehaviour:
   beamEmitterVSpan: 4
   minObjectSpacing: 2.5
   hazardSafeEdgeMargin: 0.5
-  minPlanetSize: 1.2
-  maxPlanetSize: 1.6
+  minPlanetSize: 1.5
+  maxPlanetSize: 2
   planetSizeCurve:
     serializedVersion: 2
     m_Curve:

@@ -106,10 +106,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ac9d196d73f4b744b8f5faea2e6e2b9f, type: 3}
   - {fileID: 21300000, guid: ac9d196d73f4b744b8f5faea2e6e2b9f, type: 3}
   spriteFrameDelay: 0.05
-  xRange: 3
-  xDuration: 2
-  yRange: 2
-  yDuration: 2
+  xRange: 4
+  xDuration: 4
+  yRange: 1.5
+  yDuration: 2.5
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -134,6 +134,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  orbitMoveDistance: 4
+  orbitMoveDuration: 1.5
 --- !u!60 &9197777223056729990
 PolygonCollider2D:
   m_ObjectHideFlags: 0

@@ -65,6 +65,7 @@
     <Compile Include="Assets\core\Gameplay\Camera\CameraFollowBall.cs" />
     <Compile Include="Assets\core\Gameplay\UI\SplashScene.cs" />
     <Compile Include="Assets\core\Gameplay\MusicPlayer.cs" />
+    <Compile Include="Assets\InGameTutorialHandler.cs" />
     <Compile Include="Assets\core\Gameplay\Player\BallController.cs" />
     <Compile Include="Assets\core\Gameplay\UI\UIStatsHandler.cs" />
     <Compile Include="Assets\core\Gameplay\UI\UIClickHandler.cs" />

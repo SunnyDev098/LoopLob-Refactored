@@ -14,6 +14,7 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject TutorialPanel;
 
     public GameObject sceneDecoration;
+    public PanelDecider panelDecider;
 
 
     private void Awake()
@@ -35,6 +36,8 @@ public class MainMenuHandler : MonoBehaviour
         
     }
 
+
+
     private void OnPlayClicked()
     {
         SceneManager.LoadScene("CoreGame", LoadSceneMode.Single);
@@ -48,8 +51,18 @@ public class MainMenuHandler : MonoBehaviour
 
     private void OnScoreboardClicked()
     {
-        ShowScoreboard();
-        sceneDecoration.SetActive(false);
+        if (PlayerPrefs.HasKey("PlayerUserName"))
+        {
+            ShowScoreboard();
+            sceneDecoration.SetActive(false);
+        }
+        else
+        {
+            panelDecider.ShowAuth();
+
+        }
+
+
     }
 
 

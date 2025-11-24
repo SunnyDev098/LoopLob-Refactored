@@ -22,6 +22,9 @@ public class Debugger : MonoBehaviour
 
     void Start()
     {
+        GameManager.Instance.IsDebugMode = true;
+
+
         if (valueSlider == null)
         {
             Debug.LogError("Slider reference is not set on " + gameObject.name);

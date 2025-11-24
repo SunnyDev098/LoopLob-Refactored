@@ -32,7 +32,7 @@ public class ChunkGenerator : MonoBehaviour
         await Task.Delay(100);
         difficulty = GameManager.Instance.difficulty;
         StartCoroutine(GenerateChunkCoroutine(transform.position.y-25));
-        Debug.Log(transform.position.y - 25);
+       // Debug.Log(transform.position.y - 25);
     }
 
     public IEnumerator GenerateChunkCoroutine(float baseY)

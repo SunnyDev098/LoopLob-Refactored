@@ -9,11 +9,13 @@ public class DataHandler : MonoBehaviour
     private const string BEST_SCORE_PREF_KEY = "PlayerBestScore";
     private const string USER_NAME_PREF_KEY = "PlayerUserName";
     private const string BACK_GROUND_INDEX_KEY = "BackGroundIndex";
+    private const string FIRST_TIME = "FirstTime";
 
     private int bestscore;
     private int totalcoins;
     private string username;
     public int backGroundIndex;
+    public bool firstTime;
 
     private bool isLeaderBoardReady;
 
@@ -21,6 +23,8 @@ public class DataHandler : MonoBehaviour
 
     private void Awake()
     {
+       //  PlayerPrefs.DeleteAll();
+
         if (Instance == null)
         {
             Instance = this;
@@ -35,7 +39,7 @@ public class DataHandler : MonoBehaviour
 
     private void Start()
     {
-      //  PlayerPrefs.DeleteAll();
+       // PlayerPrefs.DeleteAll();
 
         DataInitiator();
         Application.targetFrameRate = 60;
@@ -85,6 +89,17 @@ public class DataHandler : MonoBehaviour
         {
             backGroundIndex = 0;
         }
+
+        if (PlayerPrefs.HasKey(FIRST_TIME))
+        {
+            firstTime = false;
+        }
+        else
+        {
+            firstTime = true;
+
+        }
+
 
         PlayerPrefs.Save();
 

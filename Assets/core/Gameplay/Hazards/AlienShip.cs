@@ -6,9 +6,6 @@ using Core;
 
 namespace Gameplay.Player
 {
-    /// Alien enemy that wanders in a PingPong pattern and cycles sprites when hitting the ball.
-    /// Damage application is routed through the IHitBall interface.
-    
     public class AlienShip : MonoBehaviour, IHitBall
     {
         [Header("Sprites")]
@@ -29,11 +26,16 @@ namespace Gameplay.Player
         [Tooltip("S-curve for smoother motion. Defaults to EaseInOut if empty.")]
         [SerializeField] private AnimationCurve movementCurve = null;
 
+        [Header("Orbit Interaction")]
+        [SerializeField] private float orbitMoveDistance = 4f;
+        [SerializeField] private float orbitMoveDuration = 1.5f;
+
         private SpriteRenderer spriteRenderer;
         private Vector3 startPosition;
         private float tX;
         private float tY;
         private WaitForSeconds frameDelay;
+        private bool hasTriggeredOrbit = false;
 
         private void Awake()
         {
@@ -43,7 +45,8 @@ namespace Gameplay.Player
 
         private void Start()
         {
-            startPosition = new Vector3(0, transform.position.y, transform.position.z) ;
+            // Cache the initial Y/Z, set X to 0 as per original logic
+            startPosition = new Vector3(0, transform.position.y, transform.position.z);
 
             if (movementCurve == null || movementCurve.length == 0)
                 movementCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
@@ -54,11 +57,40 @@ namespace Gameplay.Player
             UpdateMovement();
         }
 
-    
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            // Check Tag and ensure it only happens once
+            if (!hasTriggeredOrbit && other.CompareTag("OuterOrbit"))
+            {
+               // hasTriggeredOrbit = true;
+                StartCoroutine(MoveUpGradually());
+            }
+        }
+
+        private IEnumerator MoveUpGradually()
+        {
+            float elapsed = 0f;
+            float initialY = startPosition.y;
+            float targetY = initialY + orbitMoveDistance;
+
+            while (elapsed < orbitMoveDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / orbitMoveDuration);
+
+                // We modify startPosition.y because UpdateMovement() relies on it.
+                // If we moved transform.position directly, Update() would reset it immediately.
+                startPosition.y = Mathf.Lerp(initialY, targetY, movementCurve.Evaluate(t));
+
+                yield return null;
+            }
+
+            // Ensure exact finish
+            startPosition.y = targetY;
+        }
+
         public void OnHitBall(BallController ballController)
         {
-
-
             if (GameManager.Instance.isShieldActive)
             {
                 GameManager.Instance.DeActiveSheildCall();
@@ -66,7 +98,6 @@ namespace Gameplay.Player
             else
             {
                 EventBus.RaiseGameOver();
-
             }
         }
 
@@ -80,28 +111,22 @@ namespace Gameplay.Player
             tY += Time.deltaTime / Mathf.Max(0.0001f, yDuration);
             float yOffset = Mathf.Lerp(-yRange, yRange, movementCurve.Evaluate(Mathf.PingPong(tY, 1f)));
 
-            transform.position =  startPosition + new Vector3(xOffset, yOffset, 0f);
+            // Apply offsets relative to the (potentially moving) startPosition
+            transform.position = startPosition + new Vector3(xOffset, yOffset, 0f);
         }
-
-      
 
         private IEnumerator CycleSpritesCoroutine()
         {
-
             spriteRenderer.sprite = sprites[0];
-
             yield return frameDelay;
-
             spriteRenderer.sprite = sprites[1];
-
             yield return frameDelay;
-
             spriteRenderer.sprite = sprites[2];
-        
 
             if (!GameManager.Instance.IsShieldActive())
                 EventBus.RaiseGameOver();
-
         }
+      
+
     }
 }
