@@ -16,7 +16,6 @@ public class MainMenuHandler : MonoBehaviour
     public GameObject sceneDecoration;
     public PanelDecider panelDecider;
 
-
     private void Awake()
     {
         if (PlayButton != null) PlayButton.onClick.AddListener(OnPlayClicked);
@@ -36,7 +35,17 @@ public class MainMenuHandler : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        if (DataHandler.Instance.GoScoreboard)
+        {
+            OnScoreboardClicked();
 
+        }
+
+
+
+    }
 
     private void OnPlayClicked()
     {
@@ -59,6 +68,7 @@ public class MainMenuHandler : MonoBehaviour
         else
         {
             panelDecider.ShowAuth();
+            DataHandler.Instance.GoScoreboard = true;
 
         }
 
@@ -73,8 +83,14 @@ public class MainMenuHandler : MonoBehaviour
     }
     public void ShowOptions()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "OptionsPanel");
     public void ShowScoreboard()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "ScoreBoardPanel");
-    public void ShowTutorial()  => OptionSelectionService.SelectOption(transform.parent.gameObject, "TutorialPanel");
+    public void ShowTutorial()
+    {
+
+        OptionSelectionService.SelectOption(transform.parent.gameObject, "TutorialPanel");
+        sceneDecoration.SetActive(false);
+
+    }
 
 
- 
+
 }

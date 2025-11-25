@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -196,9 +197,8 @@ public class UIOptions : MonoBehaviour
 
         DataHandler.Instance.backGroundIndex = temp_BG_index;
 
-
-        PlayerPrefs.Save();
-
+        DataHandler.Instance.SetBackGroundIndex(cameraBackGroundHandler.CurrentIndex);
+        Debug.Log("done");
         backchangetoast(1500);
     }
 

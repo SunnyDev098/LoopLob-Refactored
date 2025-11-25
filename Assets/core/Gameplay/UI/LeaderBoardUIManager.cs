@@ -207,6 +207,12 @@ public class LeaderboardManager : MonoBehaviour
         Debug.LogError($"Leaderboard error: {ex.Message}");
     }
 
-    private void OnBackButtonClick() => mainMenuHandler.ShowMainMenu();
+    private void OnBackButtonClick()
+    {
+
+        DataHandler.Instance.GoScoreboard = false;
+        mainMenuHandler.ShowMainMenu();
+
+    }
 
 }

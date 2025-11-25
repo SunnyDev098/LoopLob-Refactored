@@ -19,11 +19,11 @@ public class DataHandler : MonoBehaviour
 
     private bool isLeaderBoardReady;
 
-  
+
+    public bool GoScoreboard = false;
 
     private void Awake()
     {
-       //  PlayerPrefs.DeleteAll();
 
         if (Instance == null)
         {
@@ -82,12 +82,15 @@ public class DataHandler : MonoBehaviour
 
         if (PlayerPrefs.HasKey(BACK_GROUND_INDEX_KEY))
         {
+
             backGroundIndex = PlayerPrefs.GetInt(BACK_GROUND_INDEX_KEY);
             Debug.Log(backGroundIndex);
         }
         else
         {
             backGroundIndex = 0;
+            Debug.Log(backGroundIndex);
+
         }
 
         if (PlayerPrefs.HasKey(FIRST_TIME))

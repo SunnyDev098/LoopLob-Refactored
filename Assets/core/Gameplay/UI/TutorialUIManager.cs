@@ -36,9 +36,10 @@ public class TutorialUIManager : MonoBehaviour
         if (backButton) backButton.onClick.AddListener(OnBackClicked);
         if (inGameTutorial) inGameTutorial.onClick.AddListener(OnInGameTutorialClicked);
 
-        ShowPage(0); 
+        ShowPage(0);
+        SceneDecoration.SetActive(false);
 
-       // MusicPlayer.StopMusic();
+        // MusicPlayer.StopMusic();
 
     }
     private void Start()

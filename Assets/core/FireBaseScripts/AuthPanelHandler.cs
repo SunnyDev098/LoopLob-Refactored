@@ -84,6 +84,7 @@ public class AuthPanelHandler : MonoBehaviour
     private async void OnTryLaterClicked()
     {
         panelDecider.ShowMenu();
+        DataHandler.Instance.GoScoreboard = false;
     }
 
     private async void OnClaimClicked()
